@@ -17,6 +17,7 @@ namespace OnlineCodingHaui.Infrastructure.Configurations
             builder.Property(s => s.FirstName).IsRequired().HasMaxLength(50);
             builder.Property(s => s.LastName).IsRequired().HasMaxLength(50);
             builder.Property(s => s.Email).IsRequired().HasMaxLength(100);
+            builder.Property(s => s.Email).IsRequired().HasMaxLength(50);
             builder.Property(s => s.CreatedAt).HasDefaultValueSql("GETDATE()");
         }
     }

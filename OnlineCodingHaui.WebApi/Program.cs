@@ -1,6 +1,11 @@
+using Microsoft.EntityFrameworkCore;
+using OnlineCodingHaui.Infrastructure.Context;
+using OnlineCodingHaui.Infrastructure.UnitOfWorks;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddDbContext<OnlineCodingHauiContext>(ops => ops.UseSqlServer(builder.Configuration.GetConnectionString("OnlineCodingHauiConnection")));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

@@ -24,6 +24,9 @@ namespace OnlineCodingHaui.Domain.Entity
 
         // Quan hệ với CodingExercise
         public ICollection<CodingExercise> CodingExercises { get; set; }
+        // Giáo viên tạo bài học
+        public int TeacherID { get; set; }
+        public Teacher Teacher { get; set; }
     }
 
 }

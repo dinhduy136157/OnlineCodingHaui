@@ -15,15 +15,18 @@ namespace OnlineCodingHaui.Infrastructure.Configurations
         {
             builder.HasKey(e => e.ExerciseID);
             builder.Property(e => e.Title).IsRequired().HasMaxLength(255);
-            builder.Property(e => e.ProgrammingLanguage)
-                   .IsRequired()
-                   .HasMaxLength(50);
+            builder.Property(e => e.ProgrammingLanguage).IsRequired().HasMaxLength(50);
             builder.Property(e => e.CreatedAt).HasDefaultValueSql("GETDATE()");
 
             builder.HasOne(e => e.Lesson)
                    .WithMany(l => l.CodingExercises)
                    .HasForeignKey(e => e.LessonID)
-                   .OnDelete(DeleteBehavior.SetNull);
+                   .OnDelete(DeleteBehavior.NoAction);
+
+            builder.HasOne(e => e.Teacher)
+                   .WithMany(t => t.CodingExercises)
+                   .HasForeignKey(e => e.TeacherID)
+                   .OnDelete(DeleteBehavior.NoAction);
         }
     }
 

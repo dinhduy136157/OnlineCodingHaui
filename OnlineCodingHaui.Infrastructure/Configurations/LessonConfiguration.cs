@@ -18,10 +18,10 @@ namespace OnlineCodingHaui.Infrastructure.Configurations
             builder.Property(l => l.LessonContent).IsRequired();
             builder.Property(l => l.CreatedAt).HasDefaultValueSql("GETDATE()");
 
-            builder.HasOne(l => l.Subject)
-                   .WithMany(s => s.Lessons)
-                   .HasForeignKey(l => l.SubjectID)
-                   .OnDelete(DeleteBehavior.NoAction);
+            builder.HasOne(l => l.Teacher)
+               .WithMany(t => t.Lessons)
+               .HasForeignKey(l => l.TeacherID)
+               .OnDelete(DeleteBehavior.NoAction);
         }
     }
 

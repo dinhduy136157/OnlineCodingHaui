@@ -30,6 +30,10 @@ namespace OnlineCodingHaui.Domain.Entity
 
         // Quan hệ với Submission
         public ICollection<Submission> Submissions { get; set; }
+
+        // Giáo viên tạo bài tập
+        public int TeacherID { get; set; }
+        public Teacher Teacher { get; set; }
     }
 
 }
