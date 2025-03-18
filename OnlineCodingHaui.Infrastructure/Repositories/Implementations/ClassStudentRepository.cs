@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace OnlineCodingHaui.Infrastructure.Repositories.Implementations
 {
-    public class TeacherRepository : GenericRepository<Teacher>, ITeacherRepository
+    public class ClassStudentRepository : GenericRepository<ClassStudent>, IClassStudentRepository
     {
-        public TeacherRepository(OnlineCodingHauiContext context) : base(context)
+        public ClassStudentRepository(OnlineCodingHauiContext context) : base(context)
         {
         }
     }

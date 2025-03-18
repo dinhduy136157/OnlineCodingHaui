@@ -15,6 +15,11 @@ namespace OnlineCodingHaui.Infrastructure.Context
         public OnlineCodingHauiContext(DbContextOptions<OnlineCodingHauiContext> options) : base(options)
         {
         }
+        public DbSet<Class> Classes { get; set; }
+        public DbSet<ClassStudent> ClassStudents { get; set; }
+        public DbSet<LessonContent> LessonContents { get; set; }
+        public DbSet<TestCase> TestCases { get; set; }
+        public DbSet<Teacher> Teachers { get; set; }
 
         public DbSet<CodingExercise> CodingExercises { get; set; }
         public DbSet<Lesson> Lessons { get; set; }
@@ -32,6 +37,11 @@ namespace OnlineCodingHaui.Infrastructure.Context
             modelBuilder.ApplyConfiguration(new StudentConfiguration());
             modelBuilder.ApplyConfiguration(new SubjectConfiguration());
             modelBuilder.ApplyConfiguration(new SubmissionConfiguration());
+            modelBuilder.ApplyConfiguration(new ClassConfiguration());
+            modelBuilder.ApplyConfiguration(new ClassStudentConfiguration());
+            modelBuilder.ApplyConfiguration(new LessonContentConfiguration());
+            modelBuilder.ApplyConfiguration(new TestCaseConfiguration());
+            modelBuilder.ApplyConfiguration(new TeacherConfiguration());
 
         }
     }

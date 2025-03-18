@@ -13,21 +13,33 @@ namespace OnlineCodingHaui.Infrastructure.Configurations
     {
         public void Configure(EntityTypeBuilder<CodingExercise> builder)
         {
+            builder.ToTable("CodingExercises");
+
             builder.HasKey(e => e.ExerciseID);
-            builder.Property(e => e.Title).IsRequired().HasMaxLength(255);
-            builder.Property(e => e.ProgrammingLanguage).IsRequired().HasMaxLength(50);
-            builder.Property(e => e.CreatedAt).HasDefaultValueSql("GETDATE()");
 
+            builder.Property(e => e.Title)
+                .IsRequired()
+                .HasMaxLength(255);
+
+            builder.Property(e => e.Description)
+                .IsRequired();
+
+            builder.Property(e => e.ExampleInput)
+                .IsRequired();
+
+            builder.Property(e => e.ExampleOutput)
+                .IsRequired();
+
+            builder.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("GETUTCDATE()");
+
+            // Relationships
             builder.HasOne(e => e.Lesson)
-                   .WithMany(l => l.CodingExercises)
-                   .HasForeignKey(e => e.LessonID)
-                   .OnDelete(DeleteBehavior.NoAction);
-
-            builder.HasOne(e => e.Teacher)
-                   .WithMany(t => t.CodingExercises)
-                   .HasForeignKey(e => e.TeacherID)
-                   .OnDelete(DeleteBehavior.NoAction);
+                .WithMany(l => l.CodingExercises)
+                .HasForeignKey(e => e.LessonID)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
+
 
 }

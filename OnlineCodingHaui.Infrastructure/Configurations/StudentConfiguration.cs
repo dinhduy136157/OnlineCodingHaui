@@ -14,11 +14,27 @@ namespace OnlineCodingHaui.Infrastructure.Configurations
         public void Configure(EntityTypeBuilder<Student> builder)
         {
             builder.HasKey(s => s.StudentID);
-            builder.Property(s => s.FirstName).IsRequired().HasMaxLength(50);
-            builder.Property(s => s.LastName).IsRequired().HasMaxLength(50);
-            builder.Property(s => s.Email).IsRequired().HasMaxLength(100);
-            builder.Property(s => s.Email).IsRequired().HasMaxLength(50);
-            builder.Property(s => s.CreatedAt).HasDefaultValueSql("GETDATE()");
+
+            builder.Property(s => s.FirstName)
+                .IsRequired()
+                .HasMaxLength(100);
+
+            builder.Property(s => s.LastName)
+                .IsRequired()
+                .HasMaxLength(100);
+
+            builder.Property(s => s.Email)
+                .IsRequired()
+                .HasMaxLength(255);
+            builder.Property(s => s.Password)
+           .IsRequired()
+           .HasMaxLength(255);
+
+            builder.Property(s => s.PhoneNumber)
+                .HasMaxLength(15);
+
+            builder.Property(s => s.CreatedAt)
+                .HasDefaultValueSql("GETUTCDATE()");
         }
     }
 }

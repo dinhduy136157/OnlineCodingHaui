@@ -14,8 +14,14 @@ namespace OnlineCodingHaui.Infrastructure.Configurations
         public void Configure(EntityTypeBuilder<Subject> builder)
         {
             builder.HasKey(s => s.SubjectID);
-            builder.Property(s => s.SubjectID).HasMaxLength(15);
-            builder.Property(s => s.SubjectName).IsRequired().HasMaxLength(255);
+
+            builder.Property(s => s.SubjectID)
+                .HasMaxLength(15)
+                .IsRequired();
+
+            builder.Property(s => s.SubjectName)
+                .IsRequired()
+                .HasMaxLength(255);
         }
     }
 }
