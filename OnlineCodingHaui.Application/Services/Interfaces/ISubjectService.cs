@@ -14,6 +14,6 @@ namespace OnlineCodingHaui.Application.Services.Interfaces
         Task AddSubjectAsync(Subject subject);
         Task DeleteSubjectAsync(string id);
         Task UpdateSubjectAsync(Subject subject);
-        Task<Subject> GetSubjectByIdAsync(string id);
+        //Task<Subject> GetSubjectByIdAsync(string id);
     }
 }

@@ -28,7 +28,7 @@ namespace OnlineCodingHaui.WebApi.Controllers
             return Ok(subjectDto);
         }
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetSubjectByIdAsync(int Id)
+        public async Task<ActionResult> GetSubjectByIdAsync(string Id)
         {
             var subject = await _subjectService.GetByIdAsync(Id);
             var subjectDto = _mapper.Map<SubjectDto>(subject);
@@ -42,14 +42,14 @@ namespace OnlineCodingHaui.WebApi.Controllers
             return Ok(subjectDto);
         }
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateSubject(int id, SubjectDto subjectDto)
+        public async Task<ActionResult> UpdateSubject(string id, SubjectDto subjectDto)
         {
             var subject = _mapper.Map<Subject>(subjectDto);
             await _subjectService.UpdateSubjectAsync(subject);
             return NoContent();
         }
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteSubject(int id)
+        public async Task<ActionResult> DeleteSubject(string id)
         {
             await _subjectService.DeleteSubjectAsync(id);
             return Ok();
