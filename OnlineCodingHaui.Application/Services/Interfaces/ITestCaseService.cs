@@ -14,6 +14,6 @@ namespace OnlineCodingHaui.Application.Services.Interfaces
         Task AddTestCaseAsync(TestCase testCase);
         Task DeleteTestCaseAsync(int id);
         Task UpdateTestCaseAsync(TestCase testCase);
-        Task<TestCase> GetTestCaseByIdAsync(int id);
+        //Task<TestCase> GetTestCaseByIdAsync(int id);
     }
 }

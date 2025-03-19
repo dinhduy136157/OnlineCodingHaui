@@ -10,6 +10,17 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<OnlineCodingHauiContext>(ops => ops.UseSqlServer(builder.Configuration.GetConnectionString("OnlineCodingHauiConnection")));
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddTransient<IStudentService, StudentService>();
+builder.Services.AddTransient<IClassService, ClassService>();
+builder.Services.AddTransient<IClassStudentService, ClassStudentService>();
+builder.Services.AddTransient<ICodingExerciseService, CodingExerciseService>();
+builder.Services.AddTransient<ILessonContentService, LessonContentService>();
+builder.Services.AddTransient<ILessonService, LessonService>();
+builder.Services.AddTransient<ISubjectService, SubjectService>();
+builder.Services.AddTransient<ISubmissionService, SubmissionService>();
+builder.Services.AddTransient<ITeacherService, TeacherService>();
+builder.Services.AddTransient<ITestCaseService, TestCaseService>();
+
+
 
 //auto mapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

@@ -42,7 +42,7 @@ namespace OnlineCodingHaui.Application.Services.Implementations
             return await _unitOfWork.CodingExerciseRepository.GetByIdAsync(id);
         }
 
-        public async Task<CodingExercise?> GetCodingExerciseByIdAsync(int id) => await _unitOfWork.CodingExerciseRepository.GetByIdAsync(id);
+        //public async Task<CodingExercise?> GetCodingExerciseByIdAsync(int id) => await _unitOfWork.CodingExerciseRepository.GetByIdAsync(id);
 
 
         public async Task UpdateCodingExerciseAsync(CodingExercise codingExercise)

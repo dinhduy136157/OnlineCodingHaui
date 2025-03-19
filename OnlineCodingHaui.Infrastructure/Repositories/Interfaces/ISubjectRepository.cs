@@ -9,5 +9,6 @@ namespace OnlineCodingHaui.Infrastructure.Repositories.Interfaces
 {
     public interface ISubjectRepository : IGenericRepository<Subject>
     {
+        Task<Subject?> GetByIdAsync(string id);
     }
 }

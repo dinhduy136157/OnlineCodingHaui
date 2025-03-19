@@ -14,6 +14,6 @@ namespace OnlineCodingHaui.Application.Services.Interfaces
         Task AddSubmissionAsync(Submission submission);
         Task DeleteSubmissionAsync(int id);
         Task UpdateSubmissionAsync(Submission submission);
-        Task<Submission> GetSubmissionByIdAsync(int id);
+        //Task<Submission> GetSubmissionByIdAsync(int id);
     }
 }

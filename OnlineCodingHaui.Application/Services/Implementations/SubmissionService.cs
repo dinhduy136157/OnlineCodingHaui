@@ -42,7 +42,7 @@ namespace OnlineCodingHaui.Application.Services.Implementations
             return await _unitOfWork.SubmissionRepository.GetByIdAsync(id);
         }
 
-        public async Task<Submission?> GetSubmissionByIdAsync(int id) => await _unitOfWork.SubmissionRepository.GetByIdAsync(id);
+        //public async Task<Submission?> GetSubmissionByIdAsync(int id) => await _unitOfWork.SubmissionRepository.GetByIdAsync(id);
 
 
         public async Task UpdateSubmissionAsync(Submission submission)

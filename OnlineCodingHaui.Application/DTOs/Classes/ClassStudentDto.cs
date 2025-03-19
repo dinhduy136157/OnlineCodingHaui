@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace OnlineCodingHaui.Application.DTOs.Classes
 {
-    internal class ClassStudentDto
+    public class ClassStudentDto
     {
+        public int ClassID { get; set; }
+        public int StudentID { get; set; }
+        public DateTime EnrollmentDate { get; set; } = DateTime.UtcNow;
     }
 }

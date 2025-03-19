@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace OnlineCodingHaui.Application.DTOs.Classes
 {
-    internal class ClassDto
+    public class ClassDto
     {
+        public int ClassID { get; set; }
+        public string SubjectID { get; set; } = null!;
+        public string ClassName { get; set; } = null!;
+        public int TeacherID { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }

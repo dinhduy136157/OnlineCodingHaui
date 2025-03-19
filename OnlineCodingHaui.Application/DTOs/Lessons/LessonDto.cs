@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace OnlineCodingHaui.Application.DTOs.Lessons
 {
-    internal class LessonDto
+    public class LessonDto
     {
+        public int LessonID { get; set; }
+        public int ClassID { get; set; }
+        public string LessonTitle { get; set; } = null!;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }

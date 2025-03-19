@@ -10,10 +10,10 @@ namespace OnlineCodingHaui.Application.Services.Interfaces
     public interface ISubjectService
     {
         Task<IEnumerable<Subject>> GetAllSubjectAsync();
-        Task<Subject> GetByIdAsync(int id);
+        Task<Subject> GetByIdAsync(string id);
         Task AddSubjectAsync(Subject subject);
-        Task DeleteSubjectAsync(int id);
+        Task DeleteSubjectAsync(string id);
         Task UpdateSubjectAsync(Subject subject);
-        Task<Subject> GetSubjectByIdAsync(int id);
+        Task<Subject> GetSubjectByIdAsync(string id);
     }
 }

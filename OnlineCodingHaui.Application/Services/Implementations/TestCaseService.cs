@@ -42,7 +42,7 @@ namespace OnlineCodingHaui.Application.Services.Implementations
             return await _unitOfWork.TestCaseRepository.GetByIdAsync(id);
         }
 
-        public async Task<TestCase?> GetTestCaseByIdAsync(int id) => await _unitOfWork.TestCaseRepository.GetByIdAsync(id);
+        //public async Task<TestCase?> GetTestCaseByIdAsync(int id) => await _unitOfWork.TestCaseRepository.GetByIdAsync(id);
 
 
         public async Task UpdateTestCaseAsync(TestCase testCase)

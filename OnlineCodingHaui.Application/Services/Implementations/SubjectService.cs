@@ -22,7 +22,7 @@ namespace OnlineCodingHaui.Application.Services.Implementations
             await _unitOfWork.SaveChangeAsync();
         }
 
-        public async Task DeleteSubjectAsync(int id)
+        public async Task DeleteSubjectAsync(string id)
         {
             var subject = await _unitOfWork.SubjectRepository.GetByIdAsync(id);
             if (subject != null)
@@ -37,17 +37,17 @@ namespace OnlineCodingHaui.Application.Services.Implementations
             return await _unitOfWork.SubjectRepository.GetAllAsync();
         }
 
-        public async Task<Subject> GetByIdAsync(int id)
+        public async Task<Subject> GetByIdAsync(string id)
         {
             return await _unitOfWork.SubjectRepository.GetByIdAsync(id);
         }
 
-        public async Task<Subject?> GetSubjectByIdAsync(int id) => await _unitOfWork.SubjectRepository.GetByIdAsync(id);
+        //public async Task<Subject?> GetSubjectByIdAsync(string id) => await _unitOfWork.SubjectRepository.GetByIdAsync(id);
 
 
         public async Task UpdateSubjectAsync(Subject subject)
         {
-            await _unitOfWork.StudentRepository.UpdateAsync(subject);
+            await _unitOfWork.SubjectRepository.UpdateAsync(subject);
             await _unitOfWork.SaveChangeAsync();
         }
     }

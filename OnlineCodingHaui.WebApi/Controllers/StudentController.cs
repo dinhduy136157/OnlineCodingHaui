@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OnlineCodingHaui.Application.Services.Interfaces;
 using OnlineCodingHaui.Domain.Entity;
-using OnlineCodingHaui.Application.Dtos.StudentDto;
+using OnlineCodingHaui.Application.DTOs.Authentication;
 
 
 namespace OnlineCodingHaui.WebApi.Controllers

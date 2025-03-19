@@ -42,7 +42,7 @@ namespace OnlineCodingHaui.Application.Services.Implementations
             return await _unitOfWork.TeacherRepository.GetByIdAsync(id);
         }
 
-        public async Task<Teacher?> GetTeacherByIdAsync(int id) => await _unitOfWork.TeacherRepository.GetByIdAsync(id);
+        //public async Task<Teacher?> GetTeacherByIdAsync(int id) => await _unitOfWork.TeacherRepository.GetByIdAsync(id);
 
 
         public async Task UpdateTeacherAsync(Teacher teacher)

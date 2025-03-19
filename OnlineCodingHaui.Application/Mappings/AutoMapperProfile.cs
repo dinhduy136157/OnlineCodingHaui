@@ -1,5 +1,11 @@
 ﻿using AutoMapper;
-using OnlineCodingHaui.Application.Dtos.StudentDto;
+using OnlineCodingHaui.Application.DTOs.Authentication;
+using OnlineCodingHaui.Application.DTOs.Classes;
+using OnlineCodingHaui.Application.DTOs.CodingExercises;
+using OnlineCodingHaui.Application.DTOs.Lessons;
+using OnlineCodingHaui.Application.DTOs.Subjects;
+using OnlineCodingHaui.Application.DTOs.Submissions;
+using OnlineCodingHaui.Application.DTOs.TestCases;
 using OnlineCodingHaui.Domain.Entity;
 using System;
 using System.Collections.Generic;
@@ -14,6 +20,16 @@ namespace OnlineCodingHaui.Application.Mappings
         public AutoMapperProfile()
         {
             CreateMap<Student, StudentDto>().ReverseMap();
+            CreateMap<Teacher, TeacherDto>().ReverseMap();
+            CreateMap<Class, ClassDto>().ReverseMap();
+            CreateMap<ClassStudent, ClassStudentDto>().ReverseMap();
+            CreateMap<CodingExercise, CodingExerciseDto>().ReverseMap();
+            CreateMap<LessonContent, LessonContentDto>().ReverseMap();
+            CreateMap<Lesson, LessonDto>().ReverseMap();
+            CreateMap<Subject, SubjectDto>().ReverseMap();
+            CreateMap<Submission, SubmissionDto>().ReverseMap();
+            CreateMap<TestCase, TestCaseDto>().ReverseMap();
+
         }
     }
 }

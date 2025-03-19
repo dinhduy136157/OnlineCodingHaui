@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace OnlineCodingHaui.Application.DTOs.Subjects
 {
-    internal class SubjectDto
+    public class SubjectDto
     {
+        public string SubjectID { get; set; }
+        public string SubjectName { get; set; }
     }
 }
