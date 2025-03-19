@@ -18,8 +18,4 @@
     <ProjectReference Include="..\OnlineCodingHaui.Infrastructure\OnlineCodingHaui.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Dtos\LoginDto\" />
-  </ItemGroup>
-
 </Project>

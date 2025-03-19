@@ -22,11 +22,25 @@ namespace OnlineCodingHaui.Infrastructure.UnitOfWorks
             StudentRepository = new StudentRepository(_context);
             SubjectRepository = new SubjectRepository(_context);
             SubmissionRepository = new SubmissionRepository(_context);
+            ClassesRepository = new ClassesRepository(_context);
+            ClassStudentRepository = new ClassStudentRepository(_context);
+            LessonContentRepository = new LessonContentRepository(_context);
+            TestCaseRepository = new TestCaseRepository(_context);
+            TeacherRepository = new TeacherRepository(_context);
+
         }
         public ICodingExerciseRepository CodingExerciseRepository { get; }
         public ILessonRepository LessonRepository { get; }
         public IStudentRepository StudentRepository { get; }
+        public IClassesRepository ClassesRepository { get; }
+        public IClassStudentRepository ClassStudentRepository { get; }
+        public ILessonContentRepository LessonContentRepository { get; }
+        public ITestCaseRepository TestCaseRepository { get; }
+
+        public ITeacherRepository TeacherRepository { get; }
+
         public ISubjectRepository SubjectRepository { get; }
+
         public ISubmissionRepository SubmissionRepository { get; }
 
 

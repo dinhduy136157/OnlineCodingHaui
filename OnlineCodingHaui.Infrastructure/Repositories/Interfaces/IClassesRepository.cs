@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OnlineCodingHaui.Infrastructure.Repositories.Interfaces
 {
-    public interface IClassRepository : IGenericRepository<Class>
+    public interface IClassesRepository : IGenericRepository<Class>
     {
     }
 }

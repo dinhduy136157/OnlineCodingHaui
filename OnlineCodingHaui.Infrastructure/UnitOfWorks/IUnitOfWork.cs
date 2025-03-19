@@ -12,8 +12,16 @@ namespace OnlineCodingHaui.Infrastructure.UnitOfWorks
         ICodingExerciseRepository CodingExerciseRepository { get; }
         ILessonRepository LessonRepository { get; }
         IStudentRepository StudentRepository { get; }
+        ITeacherRepository TeacherRepository { get; }
+
         ISubjectRepository SubjectRepository { get; }
         ISubmissionRepository SubmissionRepository { get; }
+        IClassesRepository ClassesRepository { get; }
+
+        IClassStudentRepository ClassStudentRepository { get; }
+        ILessonContentRepository LessonContentRepository { get; }
+        ITestCaseRepository TestCaseRepository { get; }
+
         Task<int> SaveChangeAsync();
 
     }
