@@ -62,5 +62,11 @@ namespace OnlineCodingHaui.Application.Services.Implementations
             }
             return student;
         }
+        public async Task<Student?> GetCurrentStudentAsync(string studentIdString)
+        {
+            if (!int.TryParse(studentIdString, out int studentId)) return null;
+
+            return await _unitOfWork.StudentRepository.GetByIdAsync(studentId);
+        }
     }
 }

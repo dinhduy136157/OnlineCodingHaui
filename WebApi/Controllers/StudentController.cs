@@ -11,6 +11,7 @@ namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class StudentController : ControllerBase
     {
         private readonly IStudentService _studentService;
@@ -20,6 +21,21 @@ namespace WebApi.Controllers
         {
             _studentService = studentService;
             _mapper = mapper;
+        }
+        [HttpGet("me")]
+        public async Task<ActionResult> GetCurrentStudent()
+        {
+            var studentIdClaim = User.FindFirst("StudentID")?.Value;
+            if (string.IsNullOrEmpty(studentIdClaim))
+            {
+                return Unauthorized("Không tìm thấy ID trong token");
+            }
+
+            var student = await _studentService.GetCurrentStudentAsync(studentIdClaim);
+            if (student == null) return NotFound("Không tìm thấy sinh viên");
+
+            var studentDto = _mapper.Map<StudentDto>(student);
+            return Ok(studentDto);
         }
         [HttpGet]
         public async Task<ActionResult> GetAll()

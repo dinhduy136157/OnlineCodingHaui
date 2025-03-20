@@ -39,8 +39,8 @@ namespace WebApi.Controllers
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-            new Claim(ClaimTypes.NameIdentifier, student.StudentID.ToString()),
-            new Claim(ClaimTypes.Name, student.FirstName + student.LastName),
+            new Claim("StudentID", student.StudentID.ToString()), // Sửa lỗi này
+            new Claim(ClaimTypes.Name, $"{student.FirstName} {student.LastName}"), // Sửa lỗi này
             new Claim(ClaimTypes.Role, "Student")
         }),
                 Expires = DateTime.UtcNow.AddHours(1),
@@ -54,6 +54,7 @@ namespace WebApi.Controllers
 
             return Ok(new { Token = tokenString });
         }
+
 
     }
 }
