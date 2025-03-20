@@ -9,6 +9,7 @@ using OnlineCodingHaui.Infrastructure.UnitOfWorks;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
 // Cấu hình CORS
 builder.Services.AddCors(options =>
 {
@@ -33,46 +34,34 @@ builder.Services.AddTransient<ITeacherService, TeacherService>();
 builder.Services.AddTransient<ITestCaseService, TestCaseService>();
 
 
-
 //auto mapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-
-// Cấu hình JWT
+// Thêm dịch vụ authentication và JWT
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
-var key = Encoding.UTF8.GetBytes(jwtSettings["Key"] ?? throw new InvalidOperationException("jwt key missing"));
+var key = Encoding.ASCII.GetBytes(jwtSettings["Key"]);
 
-if (key.Length < 32)
+builder.Services.AddAuthentication(options =>
 {
-    throw new InvalidOperationException("Key must be 32 characters");
-}
-
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
     {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateIssuerSigningKey = true,
-            ValidateLifetime = true,
-            ValidIssuer = jwtSettings["Issuer"],
-            ValidAudience = jwtSettings["Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(key)
-        };
-
-        // Hiển thị chi tiết lỗi khi xác thực token thất bại
-        options.IncludeErrorDetails = true;
-    });
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = jwtSettings["Issuer"],
+        ValidAudience = jwtSettings["Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(key)
+    };
+});
 
 builder.Services.AddAuthorization();
-builder.Services.AddEndpointsApiExplorer();
 
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(option =>
 {
     option.SwaggerDoc("v1", new OpenApiInfo
@@ -110,17 +99,21 @@ builder.Services.AddSwaggerGen(option =>
 
 
 var app = builder.Build();
-
 // Sử dụng CORS
 app.UseCors("_myAllowSpecificOrigins");
 
-app.UseSwagger();
-app.UseSwaggerUI();
-
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
 app.UseHttpsRedirection();
-app.MapControllers();
 
+// Kích hoạt authentication và authorization
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapControllers();
+
 app.Run();

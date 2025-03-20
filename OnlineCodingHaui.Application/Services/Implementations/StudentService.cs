@@ -50,5 +50,17 @@ namespace OnlineCodingHaui.Application.Services.Implementations
             await _unitOfWork.StudentRepository.UpdateAsync(student);
             await _unitOfWork.SaveChangeAsync();
         }
+        public async Task<Student?> AuthenticateStudentAsync(int studentId, string password)
+        {
+            var student = (await _unitOfWork.StudentRepository.GetAllAsync())
+                          .FirstOrDefault(s => s.StudentID == studentId);
+
+            // So sánh mật khẩu trực tiếp (không dùng BCrypt)
+            if (student == null || student.Password != password)
+            {
+                return null;
+            }
+            return student;
+        }
     }
 }

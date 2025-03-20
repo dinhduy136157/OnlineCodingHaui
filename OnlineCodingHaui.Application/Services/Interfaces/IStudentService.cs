@@ -14,6 +14,8 @@ namespace OnlineCodingHaui.Application.Services.Interfaces
         Task AddStudentAsync(Student student);
         Task DeleteStudentAsync(int id);
         Task UpdateStudentAsync(Student student);
+        Task<Student?> AuthenticateStudentAsync(int studentId, string password);
+
         //Task<Student> GetStudentByIdAsync(int id);
     }
 }
