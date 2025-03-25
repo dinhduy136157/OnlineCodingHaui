@@ -9,5 +9,7 @@ namespace OnlineCodingHaui.Infrastructure.Repositories.Interfaces
 {
     public interface ICodingExerciseRepository : IGenericRepository<CodingExercise>
     {
+        Task<List<CodingExercise>> GetCodingExerciseAsync(int classId);
+
     }
 }

@@ -21,7 +21,6 @@ namespace WebApi.Controllers
             _classesService = classesService;
             _mapper = mapper;
         }
-        [Authorize]
         [HttpGet]
         public async Task<ActionResult> GetAll()
         {
@@ -30,9 +29,9 @@ namespace WebApi.Controllers
             return Ok(classesDto);
         }
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetClassByIdAsync(int Id)
+        public async Task<ActionResult> GetClassByIdAsync(int id)
         {
-            var classes = await _classesService.GetByIdAsync(Id);
+            var classes = await _classesService.GetByIdAsync(id);
             var classesDto = _mapper.Map<ClassDto>(classes);
             return Ok(classesDto);
         }

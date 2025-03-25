@@ -1,4 +1,5 @@
-﻿using OnlineCodingHaui.Domain.Entity;
+﻿using Microsoft.EntityFrameworkCore;
+using OnlineCodingHaui.Domain.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,5 +10,6 @@ namespace OnlineCodingHaui.Infrastructure.Repositories.Interfaces
 {
     public interface ILessonContentRepository : IGenericRepository<LessonContent>
     {
+        Task<List<LessonContent>> GetLessonContentAsync(int classId);
     }
 }

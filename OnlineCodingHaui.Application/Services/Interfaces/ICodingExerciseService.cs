@@ -1,4 +1,5 @@
-﻿using OnlineCodingHaui.Domain.Entity;
+﻿using OnlineCodingHaui.Application.DTOs.CodingExercises;
+using OnlineCodingHaui.Domain.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,8 @@ namespace OnlineCodingHaui.Application.Services.Interfaces
         Task AddCodingExerciseAsync(CodingExercise codingExercise);
         Task DeleteCodingExerciseAsync(int id);
         Task UpdateCodingExerciseAsync(CodingExercise codingExercise);
+        Task<List<CodingExerciseDto>> GetCodingExerciseAsync(int lessonId);
+        
         //Task<CodingExercise> GetCodingExerciseByIdAsync(int id);
     }
 }

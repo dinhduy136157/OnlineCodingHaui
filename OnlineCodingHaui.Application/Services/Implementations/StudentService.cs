@@ -1,4 +1,6 @@
-﻿using OnlineCodingHaui.Application.Services.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using OnlineCodingHaui.Application.DTOs.Classes;
+using OnlineCodingHaui.Application.Services.Interfaces;
 using OnlineCodingHaui.Domain.Entity;
 using OnlineCodingHaui.Infrastructure.UnitOfWorks;
 using System;
@@ -68,5 +70,20 @@ namespace OnlineCodingHaui.Application.Services.Implementations
 
             return await _unitOfWork.StudentRepository.GetByIdAsync(studentId);
         }
+
+        //Lấy ra thông tin sinh viên đang học học phần 
+        public async Task<List<ClassDto>> GetStudentClassesAsync(int studentId)
+        {
+            var classes = await _unitOfWork.StudentRepository.GetStudentClassesAsync(studentId);
+
+            return classes.Select(c => new ClassDto
+            {
+                ClassID = c.ClassID,
+                ClassName = c.ClassName,
+                SubjectName = c.Subject.SubjectName, // Lấy tên môn học
+            }).ToList();
+        }
+
+
     }
 }

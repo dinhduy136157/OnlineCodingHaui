@@ -28,9 +28,9 @@ namespace WebApi.Controllers
             return Ok(subjectDto);
         }
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetSubjectByIdAsync(string Id)
+        public async Task<ActionResult> GetSubjectByIdAsync(string id)
         {
-            var subject = await _subjectService.GetByIdAsync(Id);
+            var subject = await _subjectService.GetByIdAsync(id);
             var subjectDto = _mapper.Map<SubjectDto>(subject);
             return Ok(subjectDto);
         }

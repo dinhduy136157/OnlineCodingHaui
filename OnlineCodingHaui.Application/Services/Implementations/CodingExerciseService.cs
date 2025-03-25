@@ -1,4 +1,6 @@
-﻿using OnlineCodingHaui.Application.Services.Interfaces;
+﻿using OnlineCodingHaui.Application.DTOs.CodingExercises;
+using OnlineCodingHaui.Application.DTOs.Lessons;
+using OnlineCodingHaui.Application.Services.Interfaces;
 using OnlineCodingHaui.Domain.Entity;
 using OnlineCodingHaui.Infrastructure.UnitOfWorks;
 using System;
@@ -49,6 +51,23 @@ namespace OnlineCodingHaui.Application.Services.Implementations
         {
             await _unitOfWork.CodingExerciseRepository.UpdateAsync(codingExercise);
             await _unitOfWork.SaveChangeAsync();
+        }
+
+        public async Task<List<CodingExerciseDto>> GetCodingExerciseAsync(int lessonId)
+        {
+            var codingExercises = await _unitOfWork.CodingExerciseRepository.GetCodingExerciseAsync(lessonId);
+
+            return codingExercises.Select(data => new CodingExerciseDto
+            {
+                ExerciseID = data.ExerciseID,
+                LessonID = data.LessonID,
+                Title = data.Title,
+                Description = data.Description,
+                ExampleInput = data.ExampleInput,
+                ExampleOutput = data.ExampleOutput,
+                CreatedAt = data.CreatedAt
+
+            }).ToList();
         }
     }
 }

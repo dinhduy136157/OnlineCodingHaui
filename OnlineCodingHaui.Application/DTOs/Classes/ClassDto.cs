@@ -12,6 +12,7 @@ namespace OnlineCodingHaui.Application.DTOs.Classes
         public string SubjectID { get; set; } = null!;
         public string ClassName { get; set; } = null!;
         public int TeacherID { get; set; }
+        public string SubjectName { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }

@@ -9,9 +9,9 @@ namespace OnlineCodingHaui.Application.DTOs.Lessons
     public class LessonDto
     {
         public int LessonID { get; set; }
-        public int ClassID { get; set; }
         public string LessonTitle { get; set; } = null!;
-        public int TeacherID { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public string Progess { get; set; }
+        public string Label {  get; set; }
+        public string Files {  get; set; }
     }
 }

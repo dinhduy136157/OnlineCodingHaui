@@ -28,9 +28,9 @@ namespace WebApi.Controllers
             return Ok(teacher);
         }
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetTeacherByIdAsync(int Id)
+        public async Task<ActionResult> GetTeacherByIdAsync(int id)
         {
-            var lessonContent = await _lessonContentService.GetByIdAsync(Id);
+            var lessonContent = await _lessonContentService.GetByIdAsync(id);
             var teacher = _mapper.Map<TeacherDto>(lessonContent);
             return Ok(teacher);
         }

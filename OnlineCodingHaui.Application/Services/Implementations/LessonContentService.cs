@@ -1,4 +1,5 @@
-﻿using OnlineCodingHaui.Application.Services.Interfaces;
+﻿using OnlineCodingHaui.Application.DTOs.Lessons;
+using OnlineCodingHaui.Application.Services.Interfaces;
 using OnlineCodingHaui.Domain.Entity;
 using OnlineCodingHaui.Infrastructure.UnitOfWorks;
 using System;
@@ -49,6 +50,21 @@ namespace OnlineCodingHaui.Application.Services.Implementations
         {
             await _unitOfWork.LessonContentRepository.UpdateAsync(lessonContent);
             await _unitOfWork.SaveChangeAsync();
+        }
+        public async Task<List<LessonContentDto>> GetLessonsContentAsync(int lessonId)
+        {
+            var lessonContents = await _unitOfWork.LessonContentRepository.GetLessonContentAsync(lessonId);
+
+            return lessonContents.Select(data => new LessonContentDto
+            {
+                ContentID = data.ContentID,
+                LessonID = data.LessonID,
+                Title = data.Title,
+                ContentType = data.ContentType,
+                FileUrl = data.FileUrl,
+                Category = data.Category,
+
+            }).ToList();
         }
     }
 }

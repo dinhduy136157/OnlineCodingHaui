@@ -9,5 +9,7 @@ namespace OnlineCodingHaui.Infrastructure.Repositories.Interfaces
 {
     public interface ILessonRepository : IGenericRepository<Lesson>
     {
+        Task<List<Lesson>> GetLessonsByClassIdAsync(int classId);
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using OnlineCodingHaui.Domain.Entity;
+﻿using OnlineCodingHaui.Application.DTOs.Lessons;
+using OnlineCodingHaui.Domain.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,8 @@ namespace OnlineCodingHaui.Application.Services.Interfaces
         Task AddLessonAsync(Lesson lesson);
         Task DeleteLessonAsync(int id);
         Task UpdateLessonAsync(Lesson lesson);
+        Task<List<LessonDto>> GetLessonsByClassIdAsync(int classId);
+
         //Task<Lesson> GetLessonByIdAsync(int id);
     }
 }

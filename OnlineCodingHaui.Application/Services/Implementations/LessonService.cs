@@ -1,5 +1,7 @@
-﻿using OnlineCodingHaui.Application.Services.Interfaces;
+﻿using OnlineCodingHaui.Application.DTOs.Lessons;
+using OnlineCodingHaui.Application.Services.Interfaces;
 using OnlineCodingHaui.Domain.Entity;
+using OnlineCodingHaui.Infrastructure.Repositories.Implementations;
 using OnlineCodingHaui.Infrastructure.UnitOfWorks;
 using System;
 using System.Collections.Generic;
@@ -49,6 +51,19 @@ namespace OnlineCodingHaui.Application.Services.Implementations
         {
             await _unitOfWork.LessonRepository.UpdateAsync(lesson);
             await _unitOfWork.SaveChangeAsync();
+        }
+        public async Task<List<LessonDto>> GetLessonsByClassIdAsync(int classId)
+        {
+            var lessons = await _unitOfWork.LessonRepository.GetLessonsByClassIdAsync(classId);
+
+            return lessons.Select(lesson => new LessonDto
+            {
+                LessonID = lesson.LessonID,
+                LessonTitle = lesson.LessonTitle,
+                Label = "Lý thuyết",
+                Files = "TaiLieu.pdf",
+                Progess = "0 / 5",
+            }).ToList();
         }
     }
 }

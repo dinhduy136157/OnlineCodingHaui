@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OnlineCodingHaui.Application.DTOs.Authentication;
 using OnlineCodingHaui.Application.DTOs.CodingExercises;
+using OnlineCodingHaui.Application.Services.Implementations;
 using OnlineCodingHaui.Application.Services.Interfaces;
 using OnlineCodingHaui.Domain.Entity;
 
@@ -28,9 +29,9 @@ namespace WebApi.Controllers
             return Ok(codingExerciseDto);
         }
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetCodingExerciseByIdAsync(int Id)
+        public async Task<ActionResult> GetCodingExerciseByIdAsync(int id)
         {
-            var codingExercise = await _codingExerciseService.GetByIdAsync(Id);
+            var codingExercise = await _codingExerciseService.GetByIdAsync(id);
             var codingExerciseDto = _mapper.Map<CodingExerciseDto>(codingExercise);
             return Ok(codingExerciseDto);
         }
@@ -56,6 +57,15 @@ namespace WebApi.Controllers
         {
             await _codingExerciseService.DeleteCodingExerciseAsync(id);
             return Ok();
+        }
+
+        //Lấy ra chi CodingExercise
+
+        [HttpGet("coding-exercise")]
+        public async Task<IActionResult> GetCodingExercises(int lessonId)
+        {
+            var lessons = await _codingExerciseService.GetCodingExerciseAsync(lessonId);
+            return Ok(lessons);
         }
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OnlineCodingHaui.Application.DTOs.Authentication;
 using OnlineCodingHaui.Application.DTOs.Lessons;
+using OnlineCodingHaui.Application.Services.Implementations;
 using OnlineCodingHaui.Application.Services.Interfaces;
 using OnlineCodingHaui.Domain.Entity;
 
@@ -28,9 +29,9 @@ namespace WebApi.Controllers
             return Ok(lessonContentDto);
         }
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetLessonContentByIdAsync(int Id)
+        public async Task<ActionResult> GetLessonContentByIdAsync(int id)
         {
-            var lessonContent = await _lessonContentService.GetByIdAsync(Id);
+            var lessonContent = await _lessonContentService.GetByIdAsync(id);
             var lessonContentDto = _mapper.Map<LessonContentDto>(lessonContent);
             return Ok(lessonContentDto);
         }
@@ -56,6 +57,15 @@ namespace WebApi.Controllers
         {
             await _lessonContentService.DeleteLessonContentAsync(id);
             return Ok();
+        }
+
+        //Lấy ra chi tiết bài học theo lesson
+
+        [HttpGet("lesson-detail")]
+        public async Task<IActionResult> GetClassLessons(int lessonId)
+        {
+            var lessons = await _lessonContentService.GetLessonsContentAsync(lessonId);
+            return Ok(lessons);
         }
     }
 }
