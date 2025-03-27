@@ -1,5 +1,6 @@
 ﻿using OnlineCodingHaui.Application.DTOs.CodingExercises;
 using OnlineCodingHaui.Application.DTOs.Lessons;
+using OnlineCodingHaui.Application.DTOs.TestCases;
 using OnlineCodingHaui.Application.Services.Interfaces;
 using OnlineCodingHaui.Domain.Entity;
 using OnlineCodingHaui.Infrastructure.UnitOfWorks;
@@ -52,7 +53,7 @@ namespace OnlineCodingHaui.Application.Services.Implementations
             await _unitOfWork.CodingExerciseRepository.UpdateAsync(codingExercise);
             await _unitOfWork.SaveChangeAsync();
         }
-
+        //Lấy ra coding exercise dựa vào lesson id
         public async Task<List<CodingExerciseDto>> GetCodingExerciseAsync(int lessonId)
         {
             var codingExercises = await _unitOfWork.CodingExerciseRepository.GetCodingExerciseAsync(lessonId);
@@ -69,5 +70,33 @@ namespace OnlineCodingHaui.Application.Services.Implementations
 
             }).ToList();
         }
+
+        //Lấy ra coding exercise chi tieest dựa vào exercise id
+        public async Task<CodingExerciseDto> GetExerciseDetail(int exerciseId)
+        {
+            var exercise = await _unitOfWork.CodingExerciseRepository.GetCodingExerciseDetailAsync(exerciseId);
+
+            if (exercise == null) return null;
+
+            return new CodingExerciseDto
+            {
+                ExerciseID = exercise.ExerciseID,
+                LessonID = exercise.LessonID,
+                Title = exercise.Title,
+                Description = exercise.Description,
+                ExampleInput = exercise.ExampleInput,
+                ExampleOutput = exercise.ExampleOutput,
+                CreatedAt = exercise.CreatedAt,
+                TestCases = exercise.TestCases.Select(tc => new TestCaseDto
+                {
+                    TestCaseID = tc.TestCaseID,
+                    InputData = tc.InputData,
+                    ExpectedOutput = tc.ExpectedOutput,
+                    IsHidden = tc.IsHidden
+                }).ToList()
+            };
+        }
+
+
     }
 }

@@ -12,6 +12,6 @@ namespace OnlineCodingHaui.Application.DTOs.TestCases
         public int ExerciseID { get; set; }
         public string InputData { get; set; } = null!;
         public string ExpectedOutput { get; set; } = null!;
-        public bool IsHidden { get; set; } = true;
+        public bool IsHidden { get; set; } = false;
     }
 }

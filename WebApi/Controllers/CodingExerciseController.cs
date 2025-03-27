@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OnlineCodingHaui.Application.DTOs.Authentication;
 using OnlineCodingHaui.Application.DTOs.CodingExercises;
+using OnlineCodingHaui.Application.DTOs.Submissions;
+using OnlineCodingHaui.Application.DTOs.TestCases;
 using OnlineCodingHaui.Application.Services.Implementations;
 using OnlineCodingHaui.Application.Services.Interfaces;
 using OnlineCodingHaui.Domain.Entity;
@@ -14,11 +16,15 @@ namespace WebApi.Controllers
     public class CodingExerciseController : ControllerBase
     {
         private readonly ICodingExerciseService _codingExerciseService;
+        private readonly ITestCaseService _testCaseService;
+        private readonly ISubmissionService _submissionService;
         private readonly IMapper _mapper;
 
-        public CodingExerciseController(ICodingExerciseService codingExerciseService, IMapper mapper)
+        public CodingExerciseController(ICodingExerciseService codingExerciseService, ITestCaseService testCaseService, ISubmissionService submissionService, IMapper mapper)
         {
             _codingExerciseService = codingExerciseService;
+            _testCaseService = testCaseService;
+            _submissionService = submissionService;
             _mapper = mapper;
         }
         [HttpGet]
@@ -67,5 +73,30 @@ namespace WebApi.Controllers
             var lessons = await _codingExerciseService.GetCodingExerciseAsync(lessonId);
             return Ok(lessons);
         }
+        [HttpGet("coding-exercise-detail/{exerciseId}")]
+        public async Task<IActionResult> GetCodingExerciseDetail(int exerciseId)
+        {
+            var exercise = await _codingExerciseService.GetExerciseDetail(exerciseId);
+            if (exercise == null)
+                return NotFound(new { message = "Bài tập không tồn tại" });
+
+            return Ok(exercise);
+        }
+
+        //Lấy ra tất cả thông tin cho site CodingExercise
+        //[HttpGet("{id}/full-details")]
+        //public async Task<ActionResult> GetFullDetails(int id)
+        //{
+        //    var exercise = await _codingExerciseService.GetByIdAsync(id);
+        //    var testCases = await _testCaseService.GetByExerciseIdAsync(id);
+        //    var submissions = await _submissionService.GetByExerciseIdAsync(id);
+
+        //    return Ok(new
+        //    {
+        //        Exercise = _mapper.Map<CodingExerciseDto>(exercise),
+        //        TestCases = _mapper.Map<List<TestCaseDto>>(testCases),
+        //        Submissions = _mapper.Map<List<SubmissionDto>>(submissions)
+        //    });
+        //}
     }
 }

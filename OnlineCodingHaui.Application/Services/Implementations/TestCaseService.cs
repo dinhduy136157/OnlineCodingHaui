@@ -1,4 +1,6 @@
-﻿using OnlineCodingHaui.Application.Services.Interfaces;
+﻿using OnlineCodingHaui.Application.DTOs.CodingExercises;
+using OnlineCodingHaui.Application.DTOs.TestCases;
+using OnlineCodingHaui.Application.Services.Interfaces;
 using OnlineCodingHaui.Domain.Entity;
 using OnlineCodingHaui.Infrastructure.UnitOfWorks;
 using System;
@@ -49,6 +51,20 @@ namespace OnlineCodingHaui.Application.Services.Implementations
         {
             await _unitOfWork.TestCaseRepository.UpdateAsync(testCase);
             await _unitOfWork.SaveChangeAsync();
+        }
+
+        public async Task<List<TestCaseDto>> GetTestCaseByExerciseId(int exerciseId)
+        {
+            var testCase = await _unitOfWork.TestCaseRepository.GetTestCaseByExerciseId(exerciseId);
+
+            return testCase.Select(data => new TestCaseDto
+            {
+                TestCaseID = data.TestCaseID,
+                InputData = data.InputData,
+                ExpectedOutput = data.ExpectedOutput,
+                IsHidden = data.IsHidden,
+
+            }).ToList();
         }
     }
 }

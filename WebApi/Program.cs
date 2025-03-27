@@ -19,6 +19,12 @@ builder.Services.AddCors(options =>
               .AllowAnyHeader());
 });
 
+//Cấu hình piston api
+builder.Services.AddHttpClient("Piston", client =>
+{
+    client.BaseAddress = new Uri("http://piston-server:2000");
+    client.Timeout = TimeSpan.FromSeconds(30);
+});
 // Add services to the container.
 builder.Services.AddDbContext<OnlineCodingHauiContext>(ops => ops.UseSqlServer(builder.Configuration.GetConnectionString("OnlineCodingHauiConnection")));
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -32,6 +38,8 @@ builder.Services.AddTransient<ISubjectService, SubjectService>();
 builder.Services.AddTransient<ISubmissionService, SubmissionService>();
 builder.Services.AddTransient<ITeacherService, TeacherService>();
 builder.Services.AddTransient<ITestCaseService, TestCaseService>();
+builder.Services.AddScoped<IPistonApiService, PistonApiService>();
+
 
 
 //auto mapper

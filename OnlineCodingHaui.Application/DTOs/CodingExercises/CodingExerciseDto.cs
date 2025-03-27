@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OnlineCodingHaui.Application.DTOs.TestCases;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,5 +16,7 @@ namespace OnlineCodingHaui.Application.DTOs.CodingExercises
         public string ExampleInput { get; set; } = null!;
         public string ExampleOutput { get; set; } = null!;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public List<TestCaseDto> TestCases { get; set; }
+
     }
 }

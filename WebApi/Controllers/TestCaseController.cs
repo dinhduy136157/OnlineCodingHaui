@@ -34,6 +34,13 @@ namespace WebApi.Controllers
             var testCaseDto = _mapper.Map<TestCaseDto>(testCase);
             return Ok(testCaseDto);
         }
+        [HttpGet("GetTestCaseByExercise/{exerciseId}")]
+        public async Task<ActionResult> GetTestCaseByExerciseId(int exerciseId)
+        {
+            var testCase = await _testCaseService.GetTestCaseByExerciseId(exerciseId);
+            var testCaseDto = _mapper.Map<IEnumerable<TestCaseDto>>(testCase);
+            return Ok(testCaseDto);
+        }
         [HttpPost]
         public async Task<ActionResult> CreateTestCase(TestCaseDto testCaseDto)
         {

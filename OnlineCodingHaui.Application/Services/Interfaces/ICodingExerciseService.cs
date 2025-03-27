@@ -16,7 +16,7 @@ namespace OnlineCodingHaui.Application.Services.Interfaces
         Task DeleteCodingExerciseAsync(int id);
         Task UpdateCodingExerciseAsync(CodingExercise codingExercise);
         Task<List<CodingExerciseDto>> GetCodingExerciseAsync(int lessonId);
-        
+        Task<CodingExerciseDto> GetExerciseDetail(int exerciseId);
         //Task<CodingExercise> GetCodingExerciseByIdAsync(int id);
     }
 }

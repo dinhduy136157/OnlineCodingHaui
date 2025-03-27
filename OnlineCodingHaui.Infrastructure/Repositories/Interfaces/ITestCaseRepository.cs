@@ -9,5 +9,7 @@ namespace OnlineCodingHaui.Infrastructure.Repositories.Interfaces
 {
     public interface ITestCaseRepository : IGenericRepository<TestCase>
     {
+        Task<List<TestCase>> GetTestCaseByExerciseId(int classId);
+
     }
 }

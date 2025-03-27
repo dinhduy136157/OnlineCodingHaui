@@ -15,7 +15,7 @@ namespace OnlineCodingHaui.Application.DTOs.Submissions
         public string ProgrammingLanguage { get; set; } = null!; // 🔥 Đã chuyển vào Submission
         public DateTime SubmittedAt { get; set; } = DateTime.UtcNow;
         public string Status { get; set; } = null!; // "Accepted", "Wrong Answer", "Pending"...
-        public string Result { get; set; } = null!;
+        public string Result { get; set; } = "Chưa có kq";
         public int? Score { get; set; }
         public int? ExecutionTime { get; set; } // (ms)
         public double? MemoryUsage { get; set; }

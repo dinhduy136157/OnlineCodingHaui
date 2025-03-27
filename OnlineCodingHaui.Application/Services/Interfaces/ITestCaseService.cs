@@ -1,4 +1,5 @@
-﻿using OnlineCodingHaui.Domain.Entity;
+﻿using OnlineCodingHaui.Application.DTOs.TestCases;
+using OnlineCodingHaui.Domain.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,7 @@ namespace OnlineCodingHaui.Application.Services.Interfaces
         Task AddTestCaseAsync(TestCase testCase);
         Task DeleteTestCaseAsync(int id);
         Task UpdateTestCaseAsync(TestCase testCase);
+        Task<List<TestCaseDto>> GetTestCaseByExerciseId(int exerciseId);
         //Task<TestCase> GetTestCaseByIdAsync(int id);
     }
 }
