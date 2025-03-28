@@ -7,6 +7,8 @@ using OnlineCodingHaui.Application.DTOs.Submissions;
 using OnlineCodingHaui.Application.DTOs.TestCases;
 using OnlineCodingHaui.Application.Services.Interfaces;
 using OnlineCodingHaui.Domain.Entity;
+using Newtonsoft.Json;
+
 
 namespace WebApi.Controllers
 {
@@ -50,7 +52,7 @@ namespace WebApi.Controllers
             await _submissionService.AddSubmissionAsync(submission);
 
             // 2️⃣ Lấy danh sách test case từ DB
-            var testCases = await _testCaseService.GetTestCaseByExerciseId(1);
+            var testCases = await _testCaseService.GetTestCaseByExerciseId(submissionDto.ExerciseID);
             if (testCases == null || !testCases.Any())
             {
                 return BadRequest(new { Error = "No test cases found for this exercise." });
@@ -66,7 +68,7 @@ namespace WebApi.Controllers
 
             // 4️⃣ Chạy từng test case riêng lẻ để kiểm tra output
             int passedCount = 0;
-            List<string> outputResults = new List<string>();
+            List<object> resultDetails = new List<object>();
 
             foreach (var testCase in testCases)
             {
@@ -75,13 +77,13 @@ namespace WebApi.Controllers
                     Code = submissionDto.Code,
                     Language = submissionDto.ProgrammingLanguage,
                     Version = languageVersions.GetValueOrDefault(submissionDto.ProgrammingLanguage, "latest"),
-                    Stdin = testCase.InputData  // 👈 Gửi từng test case một
+                    Stdin = testCase.InputData
                 });
 
                 if (!pistonResult.IsSuccess)
                 {
                     submission.Status = "Failed";
-                    submission.Result = $"Error: {pistonResult.Error}";
+                    submission.Result = JsonConvert.SerializeObject(new { Error = pistonResult.Error });
                     await _submissionService.UpdateSubmissionAsync(submission);
                     return BadRequest(new { Error = pistonResult.Error });
                 }
@@ -89,15 +91,22 @@ namespace WebApi.Controllers
                 // 5️⃣ So sánh output với expected output
                 string actualOutput = pistonResult.Output.Trim();
                 string expectedOutput = testCase.ExpectedOutput.Trim();
-
                 bool isPassed = actualOutput == expectedOutput;
+
                 if (isPassed) passedCount++;
 
-                outputResults.Add($"Input: {testCase.InputData} | Expected: {expectedOutput} | Got: {actualOutput} | Result: {(isPassed ? "✅ Pass" : "❌ Fail")}");
+                // 🔹 Lưu thông tin từng test case vào JSON
+                resultDetails.Add(new
+                {
+                    input = testCase.InputData,
+                    expected = expectedOutput,
+                    output = actualOutput,
+                    status = isPassed ? "✅ Pass" : "❌ Fail"
+                });
             }
 
-            // 6️⃣ Cập nhật submission
-            submission.Result = $"{passedCount}/{testCases.Count} test cases passed\n" + string.Join("\n", outputResults);
+            // 6️⃣ Cập nhật submission với JSON result
+            submission.Result = JsonConvert.SerializeObject(resultDetails);
             submission.TestCasesPassed = passedCount;
             submission.TotalTestCases = testCases.Count;
             submission.Status = (passedCount == testCases.Count) ? "Accepted" : "Failed";
@@ -110,9 +119,10 @@ namespace WebApi.Controllers
                 PassedTestCases = passedCount,
                 TotalTestCases = testCases.Count,
                 Status = submission.Status,
-                Details = outputResults
+                Details = resultDetails
             });
         }
+
 
 
 

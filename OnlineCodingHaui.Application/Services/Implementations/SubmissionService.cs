@@ -50,5 +50,6 @@ namespace OnlineCodingHaui.Application.Services.Implementations
             await _unitOfWork.SubmissionRepository.UpdateAsync(submission);
             await _unitOfWork.SaveChangeAsync();
         }
+
     }
 }
