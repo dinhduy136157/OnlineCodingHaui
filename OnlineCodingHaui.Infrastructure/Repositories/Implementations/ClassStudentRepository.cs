@@ -1,4 +1,5 @@
-﻿using OnlineCodingHaui.Domain.Entity;
+﻿using Microsoft.EntityFrameworkCore;
+using OnlineCodingHaui.Domain.Entity;
 using OnlineCodingHaui.Infrastructure.Context;
 using OnlineCodingHaui.Infrastructure.Repositories.Interfaces;
 using System;
@@ -13,6 +14,13 @@ namespace OnlineCodingHaui.Infrastructure.Repositories.Implementations
     {
         public ClassStudentRepository(OnlineCodingHauiContext context) : base(context)
         {
+        }
+        public async Task<List<ClassStudent>> GetStudentByClassId(int classId)
+        {
+            return await _context.ClassStudents
+                .Where(c => c.ClassID == classId)
+                .Include(s => s.Student)
+                .ToListAsync();
         }
     }
 }

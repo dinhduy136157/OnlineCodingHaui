@@ -1,4 +1,5 @@
-﻿using OnlineCodingHaui.Application.Services.Interfaces;
+﻿using OnlineCodingHaui.Application.DTOs.Lessons;
+using OnlineCodingHaui.Application.Services.Interfaces;
 using OnlineCodingHaui.Domain.Entity;
 using OnlineCodingHaui.Infrastructure.UnitOfWorks;
 using System;
@@ -50,5 +51,6 @@ namespace OnlineCodingHaui.Application.Services.Implementations
             await _unitOfWork.TeacherRepository.UpdateAsync(teacher);
             await _unitOfWork.SaveChangeAsync();
         }
+
     }
 }

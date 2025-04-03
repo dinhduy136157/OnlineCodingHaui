@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OnlineCodingHaui.Application.DTOs.Authentication;
 using OnlineCodingHaui.Application.DTOs.Classes;
+using OnlineCodingHaui.Application.Services.Implementations;
 using OnlineCodingHaui.Application.Services.Interfaces;
 using OnlineCodingHaui.Domain.Entity;
 
@@ -57,6 +58,14 @@ namespace WebApi.Controllers
         {
             await _classesService.DeleteClassAsync(id);
             return Ok();
+        }
+        [HttpGet("getClassByTeacherId")]
+        public async Task<IActionResult> GetClassByTeacherId(int teacherId)
+        {
+            teacherId = 1;
+            var classes = await _classesService.GetClassByTeacherId(teacherId);
+            var classesDto = _mapper.Map<IEnumerable<ClassDto>>(classes);
+            return Ok(classesDto);
         }
     }
 }

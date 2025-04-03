@@ -1,4 +1,6 @@
-﻿using OnlineCodingHaui.Application.Services.Interfaces;
+﻿using OnlineCodingHaui.Application.DTOs.Classes;
+using OnlineCodingHaui.Application.DTOs.Lessons;
+using OnlineCodingHaui.Application.Services.Interfaces;
 using OnlineCodingHaui.Domain.Entity;
 using OnlineCodingHaui.Infrastructure.UnitOfWorks;
 using System;
@@ -49,6 +51,19 @@ namespace OnlineCodingHaui.Application.Services.Implementations
         {
             await _unitOfWork.ClassesRepository.UpdateAsync(student);
             await _unitOfWork.SaveChangeAsync();
+        }
+
+        //Lấy ra thông tin lớp học theo giáo viên và join thằng subject
+        public async Task<List<ClassDto>> GetClassByTeacherId(int teacherId)
+        {
+            var classes = await _unitOfWork.ClassesRepository.GetClassByTeacherId(teacherId);
+
+            return classes.Select(classData => new ClassDto
+            {
+                ClassID = classData.ClassID,
+                ClassName = classData.ClassName,
+                SubjectName = classData.Subject.SubjectName,
+            }).ToList();
         }
     }
 }

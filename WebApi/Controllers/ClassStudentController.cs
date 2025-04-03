@@ -57,5 +57,13 @@ namespace WebApi.Controllers
             await _classStudentService.DeleteClassStudentAsync(id);
             return Ok();
         }
+
+        [HttpGet("getStudentByClassId")]
+        public async Task<IActionResult> GetStudentByClassId(int classId)
+        {
+            var classStudent = await _classStudentService.GetStudentByClass(classId);
+            var classStudentDto = _mapper.Map<IEnumerable<StudentDto>>(classStudent);
+            return Ok(classStudentDto);
+        }
     }
 }

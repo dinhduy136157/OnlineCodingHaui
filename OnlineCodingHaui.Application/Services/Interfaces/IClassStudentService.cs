@@ -1,4 +1,6 @@
-﻿using OnlineCodingHaui.Domain.Entity;
+﻿using OnlineCodingHaui.Application.DTOs.Authentication;
+using OnlineCodingHaui.Application.DTOs.Classes;
+using OnlineCodingHaui.Domain.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +16,8 @@ namespace OnlineCodingHaui.Application.Services.Interfaces
         Task AddClassStudentAsync(ClassStudent classStudent);
         Task DeleteClassStudentAsync(int id);
         Task UpdateClassStudentAsync(ClassStudent classStudent);
+        Task<List<StudentDto>> GetStudentByClass(int classId);
+
         //Task<ClassStudent> GetClassStudentByIdAsync(int id);
     }
 }

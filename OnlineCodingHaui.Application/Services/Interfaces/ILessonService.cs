@@ -16,7 +16,6 @@ namespace OnlineCodingHaui.Application.Services.Interfaces
         Task DeleteLessonAsync(int id);
         Task UpdateLessonAsync(Lesson lesson);
         Task<List<LessonDto>> GetLessonsByClassIdAsync(int classId);
-
         //Task<Lesson> GetLessonByIdAsync(int id);
     }
 }

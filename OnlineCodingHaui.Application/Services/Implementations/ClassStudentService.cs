@@ -1,4 +1,8 @@
-﻿using OnlineCodingHaui.Application.Services.Interfaces;
+﻿using OnlineCodingHaui.Application.DTOs.Authentication;
+using OnlineCodingHaui.Application.DTOs.Classes;
+using OnlineCodingHaui.Application.DTOs.CodingExercises;
+using OnlineCodingHaui.Application.DTOs.TestCases;
+using OnlineCodingHaui.Application.Services.Interfaces;
 using OnlineCodingHaui.Domain.Entity;
 using OnlineCodingHaui.Infrastructure.UnitOfWorks;
 using System;
@@ -49,6 +53,19 @@ namespace OnlineCodingHaui.Application.Services.Implementations
         {
             await _unitOfWork.ClassStudentRepository.UpdateAsync(classStudent);
             await _unitOfWork.SaveChangeAsync();
+        }
+        public async Task<List<StudentDto>> GetStudentByClass(int classId)
+        {
+            var data = await _unitOfWork.ClassStudentRepository.GetStudentByClassId(classId);
+
+            return data.Select(c => new StudentDto
+            {
+                StudentID = c.StudentID,
+                DateOfBirth = c.Student.DateOfBirth,
+                FirstName = c.Student.FirstName,
+                LastName = c.Student.LastName,
+                Phone = c.Student.PhoneNumber,
+            }).ToList();
         }
     }
 }

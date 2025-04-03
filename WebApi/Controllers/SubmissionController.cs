@@ -8,6 +8,7 @@ using OnlineCodingHaui.Application.DTOs.TestCases;
 using OnlineCodingHaui.Application.Services.Interfaces;
 using OnlineCodingHaui.Domain.Entity;
 using Newtonsoft.Json;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace WebApi.Controllers
@@ -122,9 +123,6 @@ namespace WebApi.Controllers
                 Details = resultDetails
             });
         }
-
-
-
 
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateSubmission(int id, SubmissionDto submissionDto)
