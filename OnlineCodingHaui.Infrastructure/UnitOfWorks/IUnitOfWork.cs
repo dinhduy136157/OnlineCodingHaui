@@ -21,6 +21,7 @@ namespace OnlineCodingHaui.Infrastructure.UnitOfWorks
         IClassStudentRepository ClassStudentRepository { get; }
         ILessonContentRepository LessonContentRepository { get; }
         ITestCaseRepository TestCaseRepository { get; }
+        IFunctionTemplateRepository FunctionTemplateRepository { get; }
 
         Task<int> SaveChangeAsync();
 

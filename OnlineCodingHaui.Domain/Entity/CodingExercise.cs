@@ -20,6 +20,7 @@ namespace OnlineCodingHaui.Domain.Entity
         public Lesson Lesson { get; set; } = null!;
         public ICollection<TestCase> TestCases { get; set; } = new List<TestCase>();
         public ICollection<Submission> Submissions { get; set; } = new List<Submission>();
+        public ICollection<FunctionTemplate> FunctionTemplates { get; set; } = new List<FunctionTemplate>();
     }
 
 }

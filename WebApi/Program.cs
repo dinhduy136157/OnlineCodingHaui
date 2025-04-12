@@ -38,6 +38,8 @@ builder.Services.AddTransient<ISubjectService, SubjectService>();
 builder.Services.AddTransient<ISubmissionService, SubmissionService>();
 builder.Services.AddTransient<ITeacherService, TeacherService>();
 builder.Services.AddTransient<ITestCaseService, TestCaseService>();
+builder.Services.AddTransient<IFunctionTemplateService, FunctionTemplateService>();
+
 builder.Services.AddScoped<IPistonApiService, PistonApiService>();
 
 

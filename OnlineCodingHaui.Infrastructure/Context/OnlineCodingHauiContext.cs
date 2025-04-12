@@ -26,6 +26,7 @@ namespace OnlineCodingHaui.Infrastructure.Context
         public DbSet<Student> Student { get; set; }
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<Submission> Submissions { get; set; }
+        public DbSet<FunctionTemplate> FunctionTemplates { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -42,6 +43,8 @@ namespace OnlineCodingHaui.Infrastructure.Context
             modelBuilder.ApplyConfiguration(new LessonContentConfiguration());
             modelBuilder.ApplyConfiguration(new TestCaseConfiguration());
             modelBuilder.ApplyConfiguration(new TeacherConfiguration());
+            modelBuilder.ApplyConfiguration(new FunctionTemplateConfiguration());
+
 
         }
     }

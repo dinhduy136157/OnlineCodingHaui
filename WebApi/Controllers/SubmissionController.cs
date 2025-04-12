@@ -63,8 +63,9 @@ namespace WebApi.Controllers
             var languageVersions = new Dictionary<string, string>
             {
                 { "python", "3.12.0" },
-                { "csharp", "10.0.0" },
-                { "cpp", "10.2.0" }
+                { "csharp", "5.0.201" },
+                { "cpp", "10.2.0" },
+                { "java", "15.0.2" },
             };
 
             // 4️⃣ Chạy từng test case riêng lẻ để kiểm tra output

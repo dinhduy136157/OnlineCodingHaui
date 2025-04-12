@@ -27,6 +27,7 @@ namespace OnlineCodingHaui.Infrastructure.UnitOfWorks
             LessonContentRepository = new LessonContentRepository(_context);
             TestCaseRepository = new TestCaseRepository(_context);
             TeacherRepository = new TeacherRepository(_context);
+            FunctionTemplateRepository = new FunctionTemplateRepository(_context);
 
         }
         public ICodingExerciseRepository CodingExerciseRepository { get; }
@@ -42,6 +43,7 @@ namespace OnlineCodingHaui.Infrastructure.UnitOfWorks
         public ISubjectRepository SubjectRepository { get; }
 
         public ISubmissionRepository SubmissionRepository { get; }
+        public IFunctionTemplateRepository FunctionTemplateRepository { get; }
 
 
         public void Dispose()
