@@ -16,7 +16,9 @@ namespace OnlineCodingHaui.Domain.Entity
         public string ExampleInput { get; set; } = null!;
         public string ExampleOutput { get; set; } = null!;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
+        public string FunctionName { get; set; } = "Solve";
+        public string ReturnType { get; set; } = null!;
+        public string ParametersJson { get; set; } = null!;
         public Lesson Lesson { get; set; } = null!;
         public ICollection<TestCase> TestCases { get; set; } = new List<TestCase>();
         public ICollection<Submission> Submissions { get; set; } = new List<Submission>();

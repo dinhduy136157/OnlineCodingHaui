@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OnlineCodingHaui.Application.DTOs.Authentication;
 using OnlineCodingHaui.Application.DTOs.FunctionTemplate;
+using OnlineCodingHaui.Application.DTOs.Submissions;
 using OnlineCodingHaui.Application.Services.Implementations;
 using OnlineCodingHaui.Application.Services.Interfaces;
 using OnlineCodingHaui.Domain.Entity;
@@ -36,6 +37,15 @@ namespace WebApi.Controllers
             var functionTemplateDto = _mapper.Map<FunctionTemplateDto>(functionTemplate);
             return Ok(functionTemplateDto);
         }
+        [HttpGet("{exerciseId}/{language}")]
+        public async Task<IActionResult> GetTemplate(int exerciseId, string language)
+        {
+            var result = await _functionTemplateService.GetTemplateAsync(exerciseId, language);
+
+            if (result == null) return NotFound();
+            return Ok(result);
+        }
+
         [HttpPost]
         public async Task<ActionResult> CreateFunctionTemplate(FunctionTemplateDto functionTemplateDto)
         {

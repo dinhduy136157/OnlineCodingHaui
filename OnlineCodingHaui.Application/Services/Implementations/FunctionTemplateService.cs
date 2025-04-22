@@ -30,6 +30,7 @@ namespace OnlineCodingHaui.Application.Services.Implementations
                 FunctionTemplateContent = template.FunctionTemplateContent
             };
         }
+
         public async Task AddFunctionTemplateAsync(FunctionTemplate student)
         {
             await _unitOfWork.FunctionTemplateRepository.AddAsync(student);

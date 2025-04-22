@@ -1,4 +1,5 @@
 ﻿using OnlineCodingHaui.Application.DTOs.CodingExercises;
+using OnlineCodingHaui.Application.DTOs.FunctionTemplate;
 using OnlineCodingHaui.Domain.Entity;
 using System;
 using System.Collections.Generic;
@@ -15,5 +16,7 @@ namespace OnlineCodingHaui.Application.Services.Interfaces
         Task AddFunctionTemplateAsync(FunctionTemplate functionTemplate);
         Task DeleteFunctionTemplateAsync(int id);
         Task UpdateFunctionTemplateAsync(FunctionTemplate functionTemplate);
+        Task<FunctionTemplateDto?> GetTemplateAsync(int exerciseId, string language);
+
     }
 }

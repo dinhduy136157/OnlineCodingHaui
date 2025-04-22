@@ -66,6 +66,9 @@ namespace OnlineCodingHaui.Application.Services.Implementations
                 Description = data.Description,
                 ExampleInput = data.ExampleInput,
                 ExampleOutput = data.ExampleOutput,
+                FunctionName = data.FunctionName,
+                ReturnType = data.ReturnType,
+                ParametersJson = data.ParametersJson,
                 CreatedAt = data.CreatedAt
 
             }).ToList();
@@ -87,6 +90,9 @@ namespace OnlineCodingHaui.Application.Services.Implementations
                 ExampleInput = exercise.ExampleInput,
                 ExampleOutput = exercise.ExampleOutput,
                 CreatedAt = exercise.CreatedAt,
+                FunctionName = exercise.FunctionName,
+                ReturnType = exercise.ReturnType,
+                ParametersJson = exercise.ParametersJson,
                 TestCases = exercise.TestCases.Select(tc => new TestCaseDto
                 {
                     TestCaseID = tc.TestCaseID,

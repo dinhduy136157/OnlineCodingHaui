@@ -1,11 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using OnlineCodingHaui.Domain.Entity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OnlineCodingHaui.Infrastructure.Configurations
 {
@@ -33,6 +28,18 @@ namespace OnlineCodingHaui.Infrastructure.Configurations
             builder.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("GETUTCDATE()");
 
+            // 🆕 Wrap metadata
+            builder.Property(e => e.FunctionName)
+                .IsRequired()
+                .HasMaxLength(100);
+
+            builder.Property(e => e.ReturnType)
+                .IsRequired()
+                .HasMaxLength(100);
+
+            builder.Property(e => e.ParametersJson)
+                .IsRequired();
+
             // Relationships
             builder.HasOne(e => e.Lesson)
                 .WithMany(l => l.CodingExercises)
@@ -40,6 +47,4 @@ namespace OnlineCodingHaui.Infrastructure.Configurations
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }
-
-
 }

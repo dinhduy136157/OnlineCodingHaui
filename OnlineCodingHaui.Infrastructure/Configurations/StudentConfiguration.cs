@@ -14,7 +14,14 @@ namespace OnlineCodingHaui.Infrastructure.Configurations
         public void Configure(EntityTypeBuilder<Student> builder)
         {
             builder.HasKey(s => s.StudentID);
+            // Cấu hình StudentCode (bắt buộc + unique)
+            builder.Property(s => s.StudentCode)
+                .IsRequired()
+                .HasMaxLength(20); // Điều chỉnh độ dài nếu cần
 
+            // Thêm ràng buộc UNIQUE (cách đơn giản nhất)
+            builder.HasIndex(s => s.StudentCode)
+                .IsUnique();
             builder.Property(s => s.FirstName)
                 .IsRequired()
                 .HasMaxLength(100);

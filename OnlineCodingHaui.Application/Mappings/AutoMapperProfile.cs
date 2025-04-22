@@ -2,6 +2,7 @@
 using OnlineCodingHaui.Application.DTOs.Authentication;
 using OnlineCodingHaui.Application.DTOs.Classes;
 using OnlineCodingHaui.Application.DTOs.CodingExercises;
+using OnlineCodingHaui.Application.DTOs.FunctionTemplate;
 using OnlineCodingHaui.Application.DTOs.Lessons;
 using OnlineCodingHaui.Application.DTOs.Subjects;
 using OnlineCodingHaui.Application.DTOs.Submissions;
@@ -29,7 +30,7 @@ namespace OnlineCodingHaui.Application.Mappings
             CreateMap<Subject, SubjectDto>().ReverseMap();
             CreateMap<Submission, SubmissionDto>().ReverseMap();
             CreateMap<TestCase, TestCaseDto>().ReverseMap();
-
+            CreateMap<FunctionTemplate, FunctionTemplateDto>().ReverseMap();
         }
     }
 }

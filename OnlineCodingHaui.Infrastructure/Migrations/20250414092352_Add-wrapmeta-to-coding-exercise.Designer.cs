@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineCodingHaui.Infrastructure.Context;
 
@@ -11,9 +12,11 @@ using OnlineCodingHaui.Infrastructure.Context;
 namespace OnlineCodingHaui.Infrastructure.Migrations
 {
     [DbContext(typeof(OnlineCodingHauiContext))]
-    partial class OnlineCodingHauiContextModelSnapshot : ModelSnapshot
+    [Migration("20250414092352_Add-wrapmeta-to-coding-exercise")]
+    partial class Addwrapmetatocodingexercise
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -287,15 +290,7 @@ namespace OnlineCodingHaui.Infrastructure.Migrations
                         .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)");
 
-                    b.Property<string>("StudentCode")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
                     b.HasKey("StudentID");
-
-                    b.HasIndex("StudentCode")
-                        .IsUnique();
 
                     b.ToTable("Student");
                 });

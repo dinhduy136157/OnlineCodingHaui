@@ -8,7 +8,7 @@ namespace OnlineCodingHaui.Application.DTOs.Authentication
 {
     public class StudentLoginDto
     {
-        public int StudentID { get; set; }
+        public string StudentCode { get; set; }
         public string Password {  get; set; }
     }
 }

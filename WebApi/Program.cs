@@ -41,6 +41,8 @@ builder.Services.AddTransient<ITestCaseService, TestCaseService>();
 builder.Services.AddTransient<IFunctionTemplateService, FunctionTemplateService>();
 
 builder.Services.AddScoped<IPistonApiService, PistonApiService>();
+builder.Services.AddScoped<IWrapCodeService, WrapCodeService>();
+
 
 
 
@@ -125,5 +127,5 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
+app.UseStaticFiles();
 app.Run();

@@ -1,9 +1,6 @@
 ﻿using OnlineCodingHaui.Application.DTOs.TestCases;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OnlineCodingHaui.Application.DTOs.CodingExercises
 {
@@ -16,7 +13,12 @@ namespace OnlineCodingHaui.Application.DTOs.CodingExercises
         public string ExampleInput { get; set; } = null!;
         public string ExampleOutput { get; set; } = null!;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public List<TestCaseDto> TestCases { get; set; }
 
+        // 🆕 Thêm 3 thuộc tính phục vụ wrap code tự động
+        public string FunctionName { get; set; } = "Solve";
+        public string ReturnType { get; set; } = null!;
+        public string ParametersJson { get; set; } = null!;
+
+        public List<TestCaseDto> TestCases { get; set; } = new();
     }
 }

@@ -25,7 +25,7 @@ namespace WebApi.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] StudentLoginDto studentDto)
         {
-            var student = await _studentService.AuthenticateStudentAsync(studentDto.StudentID, studentDto.Password);
+            var student = await _studentService.AuthenticateStudentAsync(studentDto.StudentCode, studentDto.Password);
 
             if (student == null)
             {

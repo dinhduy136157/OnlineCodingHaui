@@ -61,6 +61,7 @@ namespace OnlineCodingHaui.Application.Services.Implementations
             return data.Select(c => new StudentDto
             {
                 StudentID = c.StudentID,
+                StudentCode = c.Student.StudentCode,
                 DateOfBirth = c.Student.DateOfBirth,
                 FirstName = c.Student.FirstName,
                 LastName = c.Student.LastName,

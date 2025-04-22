@@ -2,9 +2,9 @@
 using OnlineCodingHaui.Application.Services.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Net.Http;
 using System.Net.Http.Json;
-using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace OnlineCodingHaui.Application.Services.Implementations
@@ -22,85 +22,100 @@ namespace OnlineCodingHaui.Application.Services.Implementations
         {
             try
             {
-                // Tạo yêu cầu gửi đến Piston API
+                // Tạo request payload với các tham số cần thiết
                 var pistonRequest = new
                 {
                     language = request.Language,
                     version = request.Version,
-                    files = new[] { new { name = GetFileName(request.Language), content = request.Code } },
-                    stdin = request.Stdin
+                    files = new[] { new { content = request.Code } },
+                    stdin = request.Stdin,
+                    compile_timeout = 3000, // Thêm timeout compile
+                    run_timeout = 3000      // Thêm timeout run
                 };
 
-                // Gửi yêu cầu đến Piston API
+                // Gửi request đến Piston API
                 var response = await _httpClient.PostAsJsonAsync("http://localhost:2000/api/v2/execute", pistonRequest);
+                var rawJson = await response.Content.ReadAsStringAsync();
 
-                // Kiểm tra phản hồi từ Piston
+                Console.WriteLine($"Piston API Response: {rawJson}");
+
                 if (!response.IsSuccessStatusCode)
                 {
-                    // Nếu không thành công, lấy lỗi từ Piston và trả về
-                    var errorMsg = await response.Content.ReadAsStringAsync();
-                    Console.WriteLine($"Error from Piston: {errorMsg}"); // Log lỗi chi tiết vào console (hoặc file log)
-
-                    // Trả về lỗi chi tiết cho frontend
                     return new PistonResultDto
                     {
                         Run = new PistonResultDto.RunResult
                         {
-                            Stderr = $"Piston Error: {errorMsg}",
+                            Stderr = $"Piston API Error: {response.StatusCode} - {rawJson}",
                             Code = -1
                         }
                     };
                 }
 
-                // Nếu thành công, đọc kết quả trả về từ Piston
-                var pistonResult = await response.Content.ReadFromJsonAsync<PistonResultDto>();
+                // Phân tích response thủ công để tránh lỗi parse
+                using var doc = JsonDocument.Parse(rawJson);
+                var root = doc.RootElement;
 
-                // Kiểm tra lỗi biên dịch hoặc chạy từ Piston
-                if (pistonResult?.Run?.Code != null)
+                var result = new PistonResultDto
                 {
-                    // Cố gắng chuyển đổi code về int, nếu không thành công thì gán -1
-                    int code;
-                    if (!int.TryParse(pistonResult.Run.Code.ToString(), out code))
+                    Run = new PistonResultDto.RunResult()
+                };
+
+                // Xử lý phần compile (nếu có)
+                if (root.TryGetProperty("compile", out var compile))
+                {
+                    if (compile.TryGetProperty("stderr", out var compileStderr) &&
+                        !string.IsNullOrWhiteSpace(compileStderr.GetString()))
                     {
-                        code = -1; // Nếu không thể chuyển đổi, gán lỗi mặc định
+                        result.Run.Stderr = compileStderr.GetString();
+                        result.Run.Code = -1;
+                        return result;
                     }
+                }
 
-                    if (code != 0)
+                // Xử lý phần run
+                if (root.TryGetProperty("run", out var run))
+                {
+                    result.Run.Output = run.TryGetProperty("stdout", out var stdout)
+                        ? stdout.GetString()
+                        : string.Empty;
+
+                    result.Run.Stderr = run.TryGetProperty("stderr", out var stderr)
+                        ? stderr.GetString()
+                        : string.Empty;
+
+                    // Xử lý exit code linh hoạt
+                    if (run.TryGetProperty("code", out var codeElement))
                     {
-                        // Nếu có lỗi biên dịch hoặc lỗi khi chạy, lấy stderr để trả về
-                        Console.WriteLine($"Piston execution error: {pistonResult?.Run?.Stderr}");
-
-                        return new PistonResultDto
+                        result.Run.Code = codeElement.ValueKind switch
                         {
-                            Run = new PistonResultDto.RunResult
-                            {
-                                Stderr = pistonResult?.Run?.Stderr,
-                                Code = code
-                            }
+                            JsonValueKind.Number => codeElement.GetInt32(),
+                            JsonValueKind.String => int.TryParse(codeElement.GetString(), out var code) ? code : -1,
+                            _ => string.IsNullOrEmpty(result.Run.Stderr) ? 0 : -1
                         };
                     }
-                }
-                else
-                {
-                    // Nếu không có code trả về, gán lỗi mặc định
-                    return new PistonResultDto
+                    else
                     {
-                        Run = new PistonResultDto.RunResult
-                        {
-                            Stderr = "Unexpected response from Piston. No 'code' returned.",
-                            Code = -1
-                        }
-                    };
+                        result.Run.Code = string.IsNullOrEmpty(result.Run.Stderr) ? 0 : -1;
+                    }
                 }
 
-                // Trả về kết quả thành công từ Piston
-                return pistonResult;
+                return result;
+            }
+            catch (JsonException jsonEx)
+            {
+                Console.WriteLine($"JSON Parse Error: {jsonEx}");
+                return new PistonResultDto
+                {
+                    Run = new PistonResultDto.RunResult
+                    {
+                        Stderr = $"Failed to parse Piston response: {jsonEx.Message}",
+                        Code = -1
+                    }
+                };
             }
             catch (Exception ex)
             {
-                // Nếu có ngoại lệ xảy ra, log chi tiết lỗi và trả về thông báo lỗi cho sinh viên
-                Console.WriteLine($"Exception occurred: {ex.Message}");
-
+                Console.WriteLine($"Exception occurred: {ex}");
                 return new PistonResultDto
                 {
                     Run = new PistonResultDto.RunResult
@@ -111,21 +126,5 @@ namespace OnlineCodingHaui.Application.Services.Implementations
                 };
             }
         }
-
-
-
-        // Hàm hỗ trợ đặt tên file cho đúng với ngôn ngữ
-        private string GetFileName(string language)
-        {
-            return language switch
-            {
-                "csharp" => "main.cs",
-                "cpp" => "main.cpp",
-                "python" => "main.py",
-                "java" => "main.java",
-                _ => "main.txt"
-            };
-        }
-
     }
 }
