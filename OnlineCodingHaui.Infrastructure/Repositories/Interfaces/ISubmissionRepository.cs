@@ -9,5 +9,7 @@ namespace OnlineCodingHaui.Infrastructure.Repositories.Interfaces
 {
     public interface ISubmissionRepository : IGenericRepository<Submission>
     {
+        Task<List<Submission>> GetSubmissionsByStudentIdAndClassId(int studentId, int classId);
+
     }
 }

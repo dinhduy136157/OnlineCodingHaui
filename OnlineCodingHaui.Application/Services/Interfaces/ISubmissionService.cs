@@ -1,4 +1,6 @@
-﻿using OnlineCodingHaui.Domain.Entity;
+﻿using OnlineCodingHaui.Application.DTOs.CodingExercises;
+using OnlineCodingHaui.Application.DTOs.Submissions;
+using OnlineCodingHaui.Domain.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +16,8 @@ namespace OnlineCodingHaui.Application.Services.Interfaces
         Task AddSubmissionAsync(Submission submission);
         Task DeleteSubmissionAsync(int id);
         Task UpdateSubmissionAsync(Submission submission);
+        Task<List<SubmissionDto>> GetSubmissionByStudentIdAndClassID (int studentId, int classId);
+
         //Task<Submission> GetSubmissionByIdAsync(int id);
     }
 }

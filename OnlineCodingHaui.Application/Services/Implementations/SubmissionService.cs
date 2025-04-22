@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using OnlineCodingHaui.Application.DTOs.CodingExercises;
 using OnlineCodingHaui.Application.DTOs.Submissions;
 using OnlineCodingHaui.Application.Services.Interfaces;
 using OnlineCodingHaui.Domain.Entity;
@@ -52,8 +53,22 @@ namespace OnlineCodingHaui.Application.Services.Implementations
             await _unitOfWork.SubmissionRepository.UpdateAsync(submission);
             await _unitOfWork.SaveChangeAsync();
         }
+        public async Task<List<SubmissionDto>> GetSubmissionByStudentIdAndClassID(int studentId, int classId)
+        {
+            var submissions = await _unitOfWork.SubmissionRepository.GetSubmissionsByStudentIdAndClassId(studentId, classId);
 
-        
+            if (submissions == null) return null;
+
+            return submissions.Select(data => new SubmissionDto
+            {
+                SubmissionID = data.SubmissionID,
+                ExerciseID = data.ExerciseID,
+                Status = data.Status,
+                Score = data.Score,
+                SubmittedAt = data.SubmittedAt,
+            }).ToList();
+        }
+
 
     }
 }

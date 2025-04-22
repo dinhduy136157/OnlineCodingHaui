@@ -102,7 +102,22 @@ namespace OnlineCodingHaui.Application.Services.Implementations
                 }).ToList()
             };
         }
+        
+        public async Task<List<AllCodingExerciseByClassID>> GetAllCodingExerciseByClassID(int classId)
+        {
+            var codingExercises = await _unitOfWork.CodingExerciseRepository.GetAllCodingExerciseByClassID(classId);
 
+            if (codingExercises == null) return null;
+
+            return codingExercises.Select(data => new AllCodingExerciseByClassID
+            {
+                ExerciseID = data.ExerciseID,
+                LessonID = data.LessonID,
+                Title = data.Title,
+                LessonTitle = data.Lesson.LessonTitle,
+                CreatedAt = data.CreatedAt,
+            }).ToList();
+        }
 
     }
 }

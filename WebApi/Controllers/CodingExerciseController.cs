@@ -82,6 +82,15 @@ namespace WebApi.Controllers
 
             return Ok(exercise);
         }
+        [HttpGet("coding-exercise-classid/{classId}")]
+        public async Task<IActionResult> GetAllCodingExerciseByClasID(int classId)
+        {
+            var exercise = await _codingExerciseService.GetAllCodingExerciseByClassID(classId);
+            if (exercise == null)
+                return NotFound(new { message = "Bài tập không tồn tại" });
+
+            return Ok(exercise);
+        }
 
         //Lấy ra tất cả thông tin cho site CodingExercise
         //[HttpGet("{id}/full-details")]

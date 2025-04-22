@@ -30,7 +30,14 @@ namespace OnlineCodingHaui.Infrastructure.Repositories.Implementations
                 .Include(e => e.TestCases) // Load TestCases luôn
                 .FirstOrDefaultAsync(e => e.ExerciseID == exerciseId);
         }
-
+        public async Task<List<CodingExercise>> GetAllCodingExerciseByClassID(int classId)
+        {
+            return await _context.CodingExercises
+                .Include(ce => ce.Lesson) // Thêm dòng này
+                .Where(ce => _context.Lessons
+                    .Any(l => l.LessonID == ce.LessonID && l.ClassID == classId))
+                .ToListAsync();
+        }
 
     }
 }

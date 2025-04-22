@@ -189,5 +189,14 @@ namespace WebApi.Controllers
             await _submissionService.DeleteSubmissionAsync(id);
             return Ok();
         }
+        [HttpGet("submissions/students/{studentId}/classes/{classId}")]
+        public async Task<IActionResult> GetSubmissionByStudentIdAndClassId(int studentId, int classId)
+        {
+            var submission = await _submissionService.GetSubmissionByStudentIdAndClassID(studentId, classId);
+            if (submission == null)
+                return NotFound(new { message = "Bài nộp không tồn tại" });
+
+            return Ok(submission);
+        }
     }
 }
