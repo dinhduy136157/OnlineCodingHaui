@@ -67,5 +67,73 @@ namespace WebApi.Controllers
             var lessons = await _lessonContentService.GetLessonsContentAsync(lessonId);
             return Ok(lessons);
         }
+        [HttpPost("upload")]
+        public async Task<IActionResult> UploadLessonContentFile()
+        {
+            try
+            {
+                var form = Request.Form;
+
+                if (!form.Files.Any())
+                    return BadRequest("Không có file được tải lên.");
+
+                var file = form.Files[0];
+
+                // Validate file type
+                var fileExtension = Path.GetExtension(file.FileName).ToLower();
+                if (fileExtension != ".pdf")
+                    return BadRequest("Chỉ chấp nhận file PDF");
+
+                // Parse form data
+                if (!int.TryParse(form["lessonId"], out int lessonId))
+                    return BadRequest("LessonID không hợp lệ");
+
+                var title = form["title"];
+                var contentType = form["contentType"];
+                var category = form["category"];
+
+                // Tạo thư mục nếu chưa tồn tại
+                var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "pdfs");
+                if (!Directory.Exists(uploadPath))
+                    Directory.CreateDirectory(uploadPath);
+
+                // Tạo tên file unique
+                var fileName = $"{Guid.NewGuid()}{fileExtension}";
+                var filePath = Path.Combine(uploadPath, fileName);
+
+                // Lưu file vật lý
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                // Lưu metadata vào database
+                var lessonContent = new LessonContent
+                {
+                    LessonID = lessonId,
+                    Title = string.IsNullOrEmpty(title) ? Path.GetFileNameWithoutExtension(file.FileName) : title,
+                    ContentType = "PDF", // Luôn set là PDF vì chỉ chấp nhận PDF
+                    Category = category,
+                    FileUrl = fileName
+                };
+
+                await _lessonContentService.AddLessonContentAsync(lessonContent);
+
+                return Ok(new
+                {
+                    ContentID = lessonContent.ContentID,
+                    LessonID = lessonContent.LessonID,
+                    Title = lessonContent.Title,
+                    ContentType = lessonContent.ContentType,
+                    FileUrl = lessonContent.FileUrl,
+                    Category = lessonContent.Category
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Lỗi server: {ex.Message}");
+            }
+        }
+
     }
 }
