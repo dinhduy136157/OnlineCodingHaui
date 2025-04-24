@@ -51,6 +51,22 @@ namespace OnlineCodingHaui.Application.Services.Implementations
             await _unitOfWork.TeacherRepository.UpdateAsync(teacher);
             await _unitOfWork.SaveChangeAsync();
         }
+        public async Task<Teacher?> AuthenticateTeacherAsync(string email, string password)
+        {
+            var teacher = (await _unitOfWork.TeacherRepository.GetAllAsync())
+                          .FirstOrDefault(s => s.Email == email);
 
+            if (teacher == null || teacher.Password != password)
+            {
+                return null;
+            }
+            return teacher;
+        }
+        public async Task<Teacher?> GetCurrentTeacherAsync(string teacherId)
+        {
+            if (!int.TryParse(teacherId, out int teacherID)) return null;
+
+            return await _unitOfWork.TeacherRepository.GetByIdAsync(teacherID);
+        }
     }
 }
