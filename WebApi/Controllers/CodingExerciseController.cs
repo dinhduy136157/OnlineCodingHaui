@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OnlineCodingHaui.Application.DTOs.Authentication;
@@ -8,6 +9,8 @@ using OnlineCodingHaui.Application.DTOs.TestCases;
 using OnlineCodingHaui.Application.Services.Implementations;
 using OnlineCodingHaui.Application.Services.Interfaces;
 using OnlineCodingHaui.Domain.Entity;
+using System.Reflection.Metadata;
+using System.Text.Json;
 
 namespace WebApi.Controllers
 {
@@ -16,17 +19,28 @@ namespace WebApi.Controllers
     public class CodingExerciseController : ControllerBase
     {
         private readonly ICodingExerciseService _codingExerciseService;
+        private readonly IFunctionTemplateService _functionTemplateService;
+
         private readonly ITestCaseService _testCaseService;
         private readonly ISubmissionService _submissionService;
         private readonly IMapper _mapper;
 
-        public CodingExerciseController(ICodingExerciseService codingExerciseService, ITestCaseService testCaseService, ISubmissionService submissionService, IMapper mapper)
+        public CodingExerciseController(ICodingExerciseService codingExerciseService, 
+            ITestCaseService testCaseService, ISubmissionService submissionService, IMapper mapper,
+            IFunctionTemplateService functionTemplateService)
         {
             _codingExerciseService = codingExerciseService;
             _testCaseService = testCaseService;
             _submissionService = submissionService;
             _mapper = mapper;
+            _functionTemplateService = functionTemplateService;
         }
+        public class Parameter
+        {
+            public string Name { get; set; }
+            public string Type { get; set; }
+        }
+
         [HttpGet]
         public async Task<ActionResult> GetAll()
         {
@@ -46,8 +60,79 @@ namespace WebApi.Controllers
         {
             var codingExercise = _mapper.Map<CodingExercise>(codingExerciseDto);
             await _codingExerciseService.AddCodingExerciseAsync(codingExercise);
+            var templates = new List<FunctionTemplate>
+            {
+                new FunctionTemplate {
+                    ExerciseID = codingExercise.ExerciseID,
+                    Language = "java",
+                    FunctionTemplateContent = GenerateJavaTemplate(codingExercise)
+                },
+                new FunctionTemplate {
+                    ExerciseID = codingExercise.ExerciseID,
+                    Language = "python",
+                    FunctionTemplateContent = GeneratePythonTemplate(codingExercise)
+                }
+            };
+
+            foreach (var template in templates)
+            {
+                await _functionTemplateService.AddFunctionTemplateAsync(template);
+            }
             return Ok(codingExerciseDto);
         }
+
+        private string GenerateJavaTemplate(CodingExercise exercise)
+        {
+            // Deserialize JSON thành danh sách các tham số
+            var parameters = JsonSerializer.Deserialize<List<Parameter>>(exercise.ParametersJson ?? "[]") ?? new List<Parameter>();
+
+            // Tạo chuỗi tham số cho hàm (với kiểu và tên)
+            var paramString = parameters.Any()
+                ? string.Join(", ", parameters.Select(p => $"{ConvertType(p.Type ?? "int", "java")} {p.Name ?? "param"}"))
+                : "";
+
+            // Kiểu trả về và tên hàm
+            var returnType = ConvertType(exercise.ReturnType ?? "void", "java");
+            var functionName = exercise.FunctionName ?? "function";
+
+            // Trả về template với các tham số được thêm vào hàm
+            return $"public static {returnType} {functionName}({paramString}) {{\n" +
+                   "    // Write your code here\n" +
+                   (returnType != "void" ? "    return arr;\n" : "") + // Nếu không phải void, trả về arr
+                   "}";
+        }
+
+        private string GeneratePythonTemplate(CodingExercise exercise)
+        {
+            // Deserialize JSON thành danh sách các tham số
+            var parameters = JsonSerializer.Deserialize<List<Parameter>>(exercise.ParametersJson ?? "[]") ?? new List<Parameter>();
+
+            // Tạo chuỗi tham số cho hàm (với tên tham số)
+            var paramString = string.Join(", ", parameters.Select(p => p.Name ?? "param"));
+
+            // Tên hàm
+            var functionName = exercise.FunctionName ?? "function";
+
+            // Trả về function template với các tham số
+            return $"def {functionName}({paramString}):\n" +
+                   "    # Write your code here\n" +
+                   "    return arr";
+        }
+
+        private string ConvertType(string type, string language)
+        {
+            if (language == "python")
+            {
+                return type switch
+                {
+                    "int[]" => "list",
+                    "string[]" => "list",
+                    _ => type
+                };
+            }
+            return type; // Giữ nguyên kiểu cho Java
+        }
+
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateCodingExercise(int id, CodingExerciseDto codingExerciseDto)
         {

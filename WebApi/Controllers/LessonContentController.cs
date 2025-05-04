@@ -68,6 +68,8 @@ namespace WebApi.Controllers
             return Ok(lessons);
         }
         [HttpPost("upload")]
+        [Consumes("multipart/form-data")]
+
         public async Task<IActionResult> UploadLessonContentFile()
         {
             try
