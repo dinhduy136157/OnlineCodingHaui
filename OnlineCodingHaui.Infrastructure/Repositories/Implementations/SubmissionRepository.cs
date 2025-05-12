@@ -14,7 +14,7 @@ namespace OnlineCodingHaui.Infrastructure.Repositories.Implementations
     {
         public SubmissionRepository(OnlineCodingHauiContext context) : base(context)
         {
-            
+
         }
         public async Task<List<Submission>> GetSubmissionsByStudentIdAndClassId(int studentId, int classId)
         {
@@ -23,6 +23,16 @@ namespace OnlineCodingHaui.Infrastructure.Repositories.Implementations
                 .ThenInclude(e => e.Lesson)
             .Where(s => s.StudentID == studentId &&
                        s.Exercise.Lesson.ClassID == classId)
+            .OrderByDescending(s => s.SubmittedAt)
+            .ToListAsync();
+        }
+        public async Task<List<Submission>> GetSubmissionsByStudentIdAndLessonId(int studentId, int lessonId)
+        {
+            return await _context.Submissions
+            .Include(s => s.Exercise)
+                .ThenInclude(e => e.Lesson)
+            .Where(s => s.StudentID == studentId &&
+                       s.Exercise.Lesson.LessonID == lessonId)
             .OrderByDescending(s => s.SubmittedAt)
             .ToListAsync();
         }

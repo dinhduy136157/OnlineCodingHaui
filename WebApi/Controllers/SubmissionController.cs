@@ -198,5 +198,14 @@ namespace WebApi.Controllers
 
             return Ok(submission);
         }
+        [HttpGet("students/{studentId}/lessons/{lessonId}")]
+        public async Task<IActionResult> GetSubmissionByStudentIdAndLessonId(int studentId, int lessonId)
+        {
+            var submission = await _submissionService.GetSubmissionByStudentIdAndLessonID(studentId, lessonId);
+            if (submission == null)
+                return NotFound(new { message = "Bài nộp không tồn tại" });
+
+            return Ok(submission);
+        }
     }
 }

@@ -68,6 +68,21 @@ namespace OnlineCodingHaui.Application.Services.Implementations
                 SubmittedAt = data.SubmittedAt,
             }).ToList();
         }
+        public async Task<List<SubmissionDto>> GetSubmissionByStudentIdAndLessonID(int studentId, int lessonId)
+        {
+            var submissions = await _unitOfWork.SubmissionRepository.GetSubmissionsByStudentIdAndLessonId(studentId, lessonId);
+
+            if (submissions == null) return null;
+
+            return submissions.Select(data => new SubmissionDto
+            {
+                SubmissionID = data.SubmissionID,
+                ExerciseID = data.ExerciseID,
+                Status = data.Status,
+                Score = data.Score,
+                SubmittedAt = data.SubmittedAt,
+            }).ToList();
+        }
 
 
     }
