@@ -65,6 +65,10 @@ namespace OnlineCodingHaui.Application.Services.Implementations
                 Progess = "0 / 5",
             }).ToList();
         }
+        public async Task CloneLessonsFromSubjectToClassAsync(int targetClassId, string subjectId)
+        {
+            await _unitOfWork.LessonRepository.CopyLessonsAndContentsFromSampleClassAsync(targetClassId, subjectId);
+        }
 
     }
 }
