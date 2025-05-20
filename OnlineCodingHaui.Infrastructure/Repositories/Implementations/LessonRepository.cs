@@ -22,6 +22,19 @@ namespace OnlineCodingHaui.Infrastructure.Repositories.Implementations
                 .Where(l => l.ClassID == classId)
                 .ToListAsync();
         }
+        public async Task<List<Lesson>> GetLessonsByFirstClassInSubjectAsync(string subjectId)
+        {
+            var firstClassId = await _context.Classes
+                .Where(c => c.SubjectID == subjectId)
+                .OrderBy(c => c.ClassID)
+                .Select(c => c.ClassID)
+                .FirstOrDefaultAsync();
+
+            return await _context.Lessons
+                .Where(l => l.ClassID == firstClassId)
+                .ToListAsync();
+        }
+
         public async Task CopyLessonsAndContentsFromSampleClassAsync(int targetClassId, string subjectId)
         {
             // 1. Tìm lớp mẫu đầu tiên cùng subject nhưng khác class đích

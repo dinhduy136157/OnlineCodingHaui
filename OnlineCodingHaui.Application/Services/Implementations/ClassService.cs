@@ -18,10 +18,11 @@ namespace OnlineCodingHaui.Application.Services.Implementations
         {
             _unitOfWork = unitOfWork;
         }
-        public async Task AddClassAsync(Class student)
+        public async Task<Class> AddClassAsync(Class newClass) // Thay đổi return type từ void → Class
         {
-            await _unitOfWork.ClassesRepository.AddAsync(student);
+            await _unitOfWork.ClassesRepository.AddAsync(newClass);
             await _unitOfWork.SaveChangeAsync();
+            return newClass; // Trả về entity đã có ClassID
         }
 
         public async Task DeleteClassAsync(int id)

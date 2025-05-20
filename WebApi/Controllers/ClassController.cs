@@ -40,8 +40,16 @@ namespace WebApi.Controllers
         public async Task<ActionResult> CreateClass(ClassDto classesDto)
         {
             var classes = _mapper.Map<Class>(classesDto);
-            await _classesService.AddClassAsync(classes);
-            return Ok(classesDto);
+            var createdClass = await _classesService.AddClassAsync(classes);
+            var response = new
+            {
+                    ClassID = createdClass.ClassID, // Lấy ClassID từ entity đã lưu
+                    ClassName = createdClass.ClassName,
+                    SubjectID = createdClass.SubjectID
+                    // Các trường khác nếu cần
+            };
+
+            return Ok(response);
         }
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateClass(int id, ClassDto classesDto)

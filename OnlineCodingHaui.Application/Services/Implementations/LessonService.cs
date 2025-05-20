@@ -69,6 +69,19 @@ namespace OnlineCodingHaui.Application.Services.Implementations
         {
             await _unitOfWork.LessonRepository.CopyLessonsAndContentsFromSampleClassAsync(targetClassId, subjectId);
         }
+        public async Task<List<LessonDto>> GetLessonsBySubjectIdAsync(string subjectId)
+        {
+            var lessons = await _unitOfWork.LessonRepository.GetLessonsByFirstClassInSubjectAsync(subjectId);
+
+            return lessons.Select(lesson => new LessonDto
+            {
+                LessonID = lesson.LessonID,
+                LessonTitle = lesson.LessonTitle,
+                Label = "Lý thuyết",
+                Files = "TaiLieu.pdf",
+                Progess = "0 / 5",
+            }).ToList();
+        }
 
     }
 }

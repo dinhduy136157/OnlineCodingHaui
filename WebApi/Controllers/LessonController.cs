@@ -65,6 +65,12 @@ namespace WebApi.Controllers
             var lessons = await _lessonService.GetLessonsByClassIdAsync(classId);
             return Ok(lessons);
         }
+        [HttpGet("lessons-by-subjectid")]
+        public async Task<IActionResult> GetLessonBySubjectId(string subjectId)
+        {
+            var lessons = await _lessonService.GetLessonsBySubjectIdAsync(subjectId);
+            return Ok(lessons);
+        }
         [HttpPost("clone-lessons")]
         public async Task<IActionResult> CloneLessons(int targetClassId, string subjectId)
         {

@@ -13,11 +13,11 @@ namespace OnlineCodingHaui.Application.Services.Interfaces
     {
         Task<IEnumerable<Class>> GetAllClassAsync();
         Task<Class> GetByIdAsync(int id);
-        Task AddClassAsync(Class classes);
         Task DeleteClassAsync(int id);
         Task UpdateClassAsync(Class classes);
         //Task<Class> GetClassByIdAsync(int id);
         //Lấy ra thông tin lớp học theo giáo viên và join thằng subject
         Task<List<ClassDto>> GetClassByTeacherId(int teacherId);
+        Task<Class> AddClassAsync(Class newClass);
     }
 }

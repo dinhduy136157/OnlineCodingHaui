@@ -11,5 +11,6 @@ namespace OnlineCodingHaui.Infrastructure.Repositories.Interfaces
     {
         Task<List<Lesson>> GetLessonsByClassIdAsync(int classId);
         Task CopyLessonsAndContentsFromSampleClassAsync(int targetClassId, string subjectId);
+        Task<List<Lesson>> GetLessonsByFirstClassInSubjectAsync(string subjectId);
     }
 }

@@ -17,6 +17,7 @@ namespace OnlineCodingHaui.Application.Services.Interfaces
         Task UpdateLessonAsync(Lesson lesson);
         Task<List<LessonDto>> GetLessonsByClassIdAsync(int classId);
         Task CloneLessonsFromSubjectToClassAsync(int targetClassId, string subjectId);
+        Task<List<LessonDto>> GetLessonsBySubjectIdAsync(string subjectId);
 
         //Task<Lesson> GetLessonByIdAsync(int id);
     }
