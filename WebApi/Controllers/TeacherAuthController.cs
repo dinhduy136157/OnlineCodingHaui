@@ -43,7 +43,7 @@ namespace WebApi.Controllers
             new Claim(ClaimTypes.Name, $"{teacher.FirstName} {teacher.LastName}"), // Sửa lỗi này
             new Claim(ClaimTypes.Role, "Student")
         }),
-                Expires = DateTime.UtcNow.AddHours(1),
+                Expires = DateTime.UtcNow.AddHours(3),
                 Issuer = _configuration["JwtSettings:Issuer"],
                 Audience = _configuration["JwtSettings:Audience"],
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

@@ -62,7 +62,7 @@ namespace OnlineCodingHaui.Application.Services.Implementations
                 LessonTitle = lesson.LessonTitle,
                 Label = "Lý thuyết",
                 Files = "TaiLieu.pdf",
-                Progess = "0 / 5",
+                Progess = "0",
             }).ToList();
         }
         public async Task CloneLessonsFromSubjectToClassAsync(int targetClassId, string subjectId)

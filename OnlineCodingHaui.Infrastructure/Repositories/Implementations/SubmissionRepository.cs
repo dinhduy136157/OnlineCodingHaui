@@ -36,5 +36,22 @@ namespace OnlineCodingHaui.Infrastructure.Repositories.Implementations
             .OrderByDescending(s => s.SubmittedAt)
             .ToListAsync();
         }
+
+        public async Task<List<Submission>> GetSubmissionsByExerciseId(int exerciseId)
+        {
+            var latestSubmissionIds = await _context.Submissions
+            .Where(s => s.ExerciseID == exerciseId)
+            .GroupBy(s => s.StudentID)
+            .Select(g => g.OrderByDescending(s => s.SubmittedAt).First().SubmissionID)
+            .ToListAsync();
+
+            // Bước 2: Truy vấn lại Submissions + Include
+            var latestSubmissions = await _context.Submissions
+                .Where(s => latestSubmissionIds.Contains(s.SubmissionID))
+                .Include(s => s.Student)
+                .ToListAsync();
+
+            return latestSubmissions;
+        }
     }
 }

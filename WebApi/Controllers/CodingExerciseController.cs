@@ -71,6 +71,11 @@ namespace WebApi.Controllers
                     ExerciseID = codingExercise.ExerciseID,
                     Language = "python",
                     FunctionTemplateContent = GeneratePythonTemplate(codingExercise)
+                },
+                new FunctionTemplate {
+                    ExerciseID = codingExercise.ExerciseID,
+                    Language = "php",
+                    FunctionTemplateContent = GeneratePHPTemplate(codingExercise)
                 }
             };
 
@@ -98,7 +103,7 @@ namespace WebApi.Controllers
             // Trả về template với các tham số được thêm vào hàm
             return $"public static {returnType} {functionName}({paramString}) {{\n" +
                    "    // Write your code here\n" +
-                   (returnType != "void" ? "    return arr;\n" : "") + // Nếu không phải void, trả về arr
+                   (returnType != "void" ? $"    return {paramString};\n" : "") + // Nếu không phải void, trả về arr
                    "}";
         }
 
@@ -116,7 +121,27 @@ namespace WebApi.Controllers
             // Trả về function template với các tham số
             return $"def {functionName}({paramString}):\n" +
                    "    # Write your code here\n" +
-                   "    return arr";
+                   $"    return {paramString}";
+        }
+
+        private string GeneratePHPTemplate(CodingExercise exercise)
+        {
+            // Deserialize JSON thành danh sách các tham số
+            var parameters = JsonSerializer.Deserialize<List<Parameter>>(exercise.ParametersJson ?? "[]") ?? new List<Parameter>();
+
+            // Tạo chuỗi tham số cho hàm (với kiểu và tên)
+            var paramString = parameters.Any()
+                ? string.Join(", ", parameters.Select(p => $"${p.Name ?? "param"}"))
+                : "";
+
+            // Tên hàm
+            var functionName = exercise.FunctionName ?? "function";
+
+            // Trả về template với các tham số được thêm vào hàm
+            return $"function {functionName}({paramString}) {{\n" +
+                   "    // Write your code here\n" +
+                   $"    return ${paramString};\n" +
+                   "}";
         }
 
         private string ConvertType(string type, string language)

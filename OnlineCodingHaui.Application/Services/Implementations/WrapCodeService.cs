@@ -18,6 +18,7 @@ namespace OnlineCodingHaui.Application.Services.Implementations
                 {
                     "python" => WrapPython(studentCode, functionName, returnType, parameters),
                     "java" => WrapJava(studentCode, functionName, returnType, parameters),
+                    "php" => WrapPHP(studentCode, functionName, returnType, parameters),
                     _ => throw new NotSupportedException($"Language {language} is not supported")
                 };
             }
@@ -81,7 +82,24 @@ if __name__ == '__main__':
             }}";
         }
 
+        private string WrapPHP(string code, string functionName, string returnType, List<Parameter> parameters)
+        {
+            code = code.Trim();
 
+            return $@"<?php
+            {code}
+
+            // Input processing
+            $input = trim(fgets(STDIN));
+            {GeneratePHPInputProcessing(parameters)}
+
+            // Execute function
+            $result = {functionName}({string.Join(", ", parameters.Select(p => "$" + p.Name))});
+
+            // Output processing
+            {GeneratePHPOutput(returnType)}
+            ?>";
+        }
 
         #region Input Processing
         private string GeneratePythonInputProcessing(List<Parameter> parameters)
@@ -121,13 +139,18 @@ if __name__ == '__main__':
         {
             var sb = new StringBuilder();
 
-            // Nếu chỉ có 1 tham số và là mảng
+            // Nếu chỉ có 1 tham số và kiểu mảng
             if (parameters.Count == 1 && parameters[0].Type.EndsWith("[]"))
             {
                 var param = parameters[0];
-                sb.AppendLine($"{param.Type} {param.Name} = Arrays.stream(input.replaceAll(\"[\\\\[\\\\]]\", \"\").split(\",\"))");
-                sb.AppendLine($".map(String::trim).filter(s -> !s.isEmpty()).mapTo{GetJavaArrayType(param.Type.Replace("[]", ""))}({GetJavaTypeConverter(param.Type.Replace("[]", ""))}).toArray();");
-
+                sb.AppendLine("String[] inputArray = input.replaceAll(\"[\\\\[\\\\]]\", \"\").split(\",\");");
+                sb.AppendLine($"{param.Type} {param.Name} = new {param.Type}[inputArray.length];");
+                sb.AppendLine("for (int i = 0; i < inputArray.length; i++) {");
+                sb.AppendLine($"    String trimmed = inputArray[i].trim();");
+                sb.AppendLine($"    if (!trimmed.isEmpty()) {{");
+                sb.AppendLine($"        {param.Name}[i] = {GetJavaParseFunction(param.Type.Replace("[]", ""))}(trimmed);");
+                sb.AppendLine($"    }}");
+                sb.AppendLine("}");
             }
             else
             {
@@ -136,10 +159,59 @@ if __name__ == '__main__':
                 for (int i = 0; i < parameters.Count; i++)
                 {
                     var param = parameters[i];
-                    sb.AppendLine(param.Type.EndsWith("[]")
-                        ? $"{param.Type} {param.Name} = Arrays.stream(parts[{i}].replaceAll(\"[\\\\[\\\\]]\", \"\").split(\",\"))"
-                          + $".map(String::trim).filter(s -> !s.isEmpty()).mapTo{GetJavaArrayType(param.Type.Replace("[]", ""))}({GetJavaTypeConverter(param.Type.Replace("[]", ""))}).toArray();"
-                        : $"{GetJavaType(param.Type)} {param.Name} = {GetJavaParseFunction(param.Type)}(parts[{i}]);");
+                    if (param.Type.EndsWith("[]"))
+                    {
+                        sb.AppendLine($"String[] arrayParts = parts[{i}].replaceAll(\"[\\\\[\\\\]]\", \"\").split(\",\");");
+                        sb.AppendLine($"{param.Type} {param.Name} = new {param.Type}[arrayParts.length];");
+                        sb.AppendLine("for (int j = 0; j < arrayParts.length; j++) {");
+                        sb.AppendLine($"    String trimmed = arrayParts[j].trim();");
+                        sb.AppendLine($"    if (!trimmed.isEmpty()) {{");
+                        sb.AppendLine($"        {param.Name}[j] = {GetJavaParseFunction(param.Type.Replace("[]", ""))}(trimmed);");
+                        sb.AppendLine($"    }}");
+                        sb.AppendLine("}");
+                    }
+                    else
+                    {
+                        sb.AppendLine($"String trimmed = parts[{i}].trim();");
+                        sb.AppendLine($"if (!trimmed.isEmpty()) {{");
+                        sb.AppendLine($"    {GetJavaType(param.Type)} {param.Name} = {GetJavaParseFunction(param.Type)}(trimmed);");
+                        sb.AppendLine($"}} else {{");
+                        sb.AppendLine($"    {GetJavaType(param.Type)} {param.Name} = {GetJavaDefaultValue(param.Type)};");
+                        sb.AppendLine($"}}");
+                    }
+                }
+            }
+
+            return sb.ToString();
+        }
+
+        private string GeneratePHPInputProcessing(List<Parameter> parameters)
+        {
+            var sb = new StringBuilder();
+
+            // Nếu chỉ có 1 tham số và kiểu mảng
+            if (parameters.Count == 1 && parameters[0].Type.EndsWith("[]"))
+            {
+                var param = parameters[0];
+                sb.AppendLine($"$inputArray = array_map('trim', explode(',', trim($input, '[]')));");
+                sb.AppendLine($"${param.Name} = array_map('{GetPHPTypeConverter(param.Type.Replace("[]", ""))}', $inputArray);");
+            }
+            else
+            {
+                // Xử lý trường hợp nhiều tham số
+                sb.AppendLine("$parts = explode(' ', $input);");
+                for (int i = 0; i < parameters.Count; i++)
+                {
+                    var param = parameters[i];
+                    if (param.Type.EndsWith("[]"))
+                    {
+                        sb.AppendLine($"$arrayParts = array_map('trim', explode(',', trim($parts[{i}], '[]')));");
+                        sb.AppendLine($"${param.Name} = array_map('{GetPHPTypeConverter(param.Type.Replace("[]", ""))}', $arrayParts);");
+                    }
+                    else
+                    {
+                        sb.AppendLine($"${param.Name} = {GetPHPTypeConverter(param.Type)}(trim($parts[{i}]));");
+                    }
                 }
             }
 
@@ -163,24 +235,71 @@ if __name__ == '__main__':
             {
                 return @"
             if (result == null) {
-                System.out.println(""null"");
+                System.out.println(""[]"");
             } else {
-                System.out.print(""["");
+                StringBuilder sb = new StringBuilder();
+                sb.append(""["");
                 for (int i = 0; i < result.length; i++) {
-                    System.out.print(result[i]);
+                    if (result[i] != null) {
+                        sb.append(result[i]);
+                    }
                     if (i < result.length - 1) {
-                        System.out.print("", "");
+                        sb.append("", "");
                     }
                 }
-                System.out.println(""]"");
-            }
-        ";
+                sb.append(""]"");
+                System.out.println(sb.toString());
+            }";
             }
             else
             {
                 return @"
-            System.out.println(result);
-        ";
+            if (result == null) {
+                System.out.println(""null"");
+            } else {
+                System.out.println(result);
+            }";
+            }
+        }
+
+        private string GeneratePHPOutput(string returnType)
+        {
+            var lowerType = returnType.ToLower();
+            if (lowerType == "bool[]" || lowerType == "boolean[]")
+            {
+                return @"
+if ($result === null) {
+    echo '[]';
+} else {
+    echo '[' . implode(', ', array_map(function($v) { return $v ? 'True' : 'False'; }, $result)) . ']';
+}";
+            }
+            else if (lowerType == "bool" || lowerType == "boolean")
+            {
+                return @"
+if ($result === null) {
+    echo 'null';
+} else {
+    echo $result ? 'True' : 'False';
+}";
+            }
+            else if (returnType.EndsWith("[]"))
+            {
+                return @"
+if ($result === null) {
+    echo '[]';
+} else {
+    echo '[' . implode(', ', $result) . ']';
+}";
+            }
+            else
+            {
+                return @"
+if ($result === null) {
+    echo 'null';
+} else {
+    echo $result;
+}";
             }
         }
 
@@ -236,6 +355,26 @@ if __name__ == '__main__':
             "double" => "Double.parseDouble",
             "bool" => "Boolean.parseBoolean",
             _ => ""
+        };
+
+        private string GetJavaDefaultValue(string type) => type switch
+        {
+            "int" => "0",
+            "float" => "0.0f",
+            "double" => "0.0",
+            "string" => "\"\"",
+            "bool" => "false",
+            _ => "null"
+        };
+
+        private string GetPHPTypeConverter(string type) => type switch
+        {
+            "int" => "intval",
+            "float" => "floatval",
+            "double" => "floatval",
+            "string" => "strval",
+            "bool" => "boolval",
+            _ => "strval"
         };
         #endregion
         private string Indent(string code, int level = 1)

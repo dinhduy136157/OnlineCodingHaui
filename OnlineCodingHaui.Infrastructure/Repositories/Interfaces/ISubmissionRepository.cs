@@ -11,6 +11,8 @@ namespace OnlineCodingHaui.Infrastructure.Repositories.Interfaces
     {
         Task<List<Submission>> GetSubmissionsByStudentIdAndClassId(int studentId, int classId);
         Task<List<Submission>> GetSubmissionsByStudentIdAndLessonId(int studentId, int lessonId);
+        Task<List<Submission>> GetSubmissionsByExerciseId(int exerciseId);
+
 
     }
 }

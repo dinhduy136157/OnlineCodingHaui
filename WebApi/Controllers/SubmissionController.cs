@@ -70,7 +70,8 @@ namespace WebApi.Controllers
                 {
                     { "python", "3.12.0" },
                     { "java", "15.0.2" },
-                    { "javascript", "20.11.1" }
+                    { "javascript", "20.11.1" },
+                    { "php", "8.2.3" },
                 };
 
                 // 5️⃣ Wrap code của học sinh
@@ -129,6 +130,8 @@ namespace WebApi.Controllers
                         input = testCase.InputData,
                         expected = expectedOutput,
                         output = actualOutput,
+                        executionTime = pistonResult.WallTime,
+                        cpuTime = pistonResult.CpuTime,
                         status = isPassed ? "✅ Pass" : "❌ Fail"
                     });
                 }
@@ -202,6 +205,15 @@ namespace WebApi.Controllers
         public async Task<IActionResult> GetSubmissionByStudentIdAndLessonId(int studentId, int lessonId)
         {
             var submission = await _submissionService.GetSubmissionByStudentIdAndLessonID(studentId, lessonId);
+            if (submission == null)
+                return NotFound(new { message = "Bài nộp không tồn tại" });
+
+            return Ok(submission);
+        }
+        [HttpGet("exercises/{exerciseId}")]
+        public async Task<IActionResult> GetSubmissionByExerciseId(int exerciseId)
+        {
+            var submission = await _submissionService.GetSubmissionsByExerciseId(exerciseId);
             if (submission == null)
                 return NotFound(new { message = "Bài nộp không tồn tại" });
 

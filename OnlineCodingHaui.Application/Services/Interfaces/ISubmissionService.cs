@@ -18,6 +18,7 @@ namespace OnlineCodingHaui.Application.Services.Interfaces
         Task UpdateSubmissionAsync(Submission submission);
         Task<List<SubmissionDto>> GetSubmissionByStudentIdAndClassID (int studentId, int classId);
         Task<List<SubmissionDto>> GetSubmissionByStudentIdAndLessonID(int studentId, int lessonId);
+        Task<List<SubmissionStudentDto>> GetSubmissionsByExerciseId(int exerciseId);
 
 
         //Task<Submission> GetSubmissionByIdAsync(int id);

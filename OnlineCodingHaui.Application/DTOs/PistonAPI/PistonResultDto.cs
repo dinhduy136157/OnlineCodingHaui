@@ -11,7 +11,8 @@ namespace OnlineCodingHaui.Application.DTOs.PistonAPI
         public bool IsSuccess => Run?.Code == 0;
         public string Output => Run?.Output;
         public string Error => Run?.Stderr;
-
+        public int? CpuTime { get; set; }
+        public int? WallTime { get; set; }
         public class RunResult
         {
             public string Output { get; set; }
